@@ -6,13 +6,18 @@ struct Move {
     virtual void print_move() const =0;
 };
 
+typedef std::vector<Move*> Moves;
+
 struct Board {
     typedef ::Move Move;
 
 	virtual void print_board() const =0;
+	virtual Moves get_moves() const=0;
 
 	Move *move;
 };
+
+typedef std::vector<Board*> Boards;
 
 //class implementation
 struct MoveA: public Move {
@@ -25,6 +30,12 @@ struct BoardA: public Board {
 	BoardA() : Board() { this->move=new Move(); }
 	~BoardA() { delete this->move; }
 	virtual void print_board() const { std::cout<<"board_a"<<std::endl; }
+	virtual Moves get_moves() const {
+		Moves moves;
+		moves.push_back(this->move);
+		moves.push_back(this->move);
+		return moves;
+	}
 };
 
 struct BoardB: public Board {
@@ -35,10 +46,14 @@ struct BoardB: public Board {
 	BoardB() : Board() { this->move=new Move(); }
 	~BoardB() { delete this->move; }
 	virtual void print_board() const { std::cout<<"board_b"<<std::endl; }
+	virtual Moves get_moves() const {
+		Moves moves;
+		moves.push_back(this->move);
+		moves.push_back(this->move);
+		moves.push_back(this->move);
+		return moves;
+	}
 };
-
-//typedef
-typedef std::vector<Board*> Boards;
 
 //do the stuff
 int main(int argc, char *argv[]) {
@@ -46,10 +61,17 @@ int main(int argc, char *argv[]) {
 	boards.push_back(new BoardA());
 	boards.push_back(new BoardB());
 
-	for (Boards::const_iterator iter=boards.begin(); iter<boards.end(); iter++) {
-		const Board *current=*iter;
-		current->print_board();
-		current->move->print_move();
+	for (Boards::const_iterator board_iter=boards.begin(); board_iter!=boards.end(); board_iter++) {
+		const Board *board=*board_iter;
+
+		board->print_board();
+
+		Moves moves=board->get_moves();
+		for (Moves::const_iterator move_iter=moves.begin(); move_iter!=moves.end(); move_iter++) {
+			const Board::Move *move=*move_iter;
+
+			move->print_move();
+		}
 	}
 
 	for (Boards::iterator iter=boards.begin(); iter<boards.end(); iter++) {

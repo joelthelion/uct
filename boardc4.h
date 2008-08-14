@@ -1,7 +1,6 @@
 #ifndef __BOARDC4__
 #define __BOARDC4__
 
-#include <vector>
 #include "board.h"
 #include "common.h"
 

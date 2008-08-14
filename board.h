@@ -1,15 +1,18 @@
 #ifndef __BOARD__
 #define __BOARD__
 
+#include <vector>
+
 class Move {
 public:
     virtual void print() const =0;
 }
 
+typedef std::vector<*Move> Moves;
+
 class Board {
 public:
 	typedef ::Move Move;
-	typedef std::vector<Move> Moves;
 
 	virtual void print() const =0;
 	virtual bool is_move_valid(Move move) const =0;
