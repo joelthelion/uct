@@ -20,8 +20,7 @@ void MoveC4::print() const {
 	std::cout<<std::endl;
 }
 
-BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NULL,NOT_PLAYED,0), width(width), height(height), win_length(win_length) {
-	size=width*height;
+BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NULL,NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 
 	//allocate flat
 	flat=new Token[size];
@@ -87,8 +86,13 @@ bool BoardC4::is_move_valid(const Move &abstract_move) const {
 	return move.board==this and move.token==token_for_columns[move.column] and move.token>=tokens[move.column];
 }
 
-Moves BoardC4::get_possible_moves() const {
+Moves BoardC4::get_possible_moves(Token player) const {
 	Moves moves;
+	
+	for (Size column=0; column<width; column++) {
+		if (tokens[column]<=token_for_columns[column]) moves.push_back(new MoveC4(this,player,column));
+	}
+
 	return moves;
 }
 
@@ -99,10 +103,26 @@ void BoardC4::play_move(const Move &abstract_move) {
 
 	*token_for_columns[move.column]=move.player;
 	token_for_columns[move.column]--;
+
+	played_count++;
 	lastmove=move;
 }
 
-void BoardC4::play_random_move(const Move &move) {
+bool BoardC4::play_random_move(Token player) {
+	if (played_count<size) {
+		Moves possible_moves=get_possible_moves(player);
+
+		Move *selected=possible_moves[rand()%possible_moves.size()];
+		play_move(*selected);
+
+		for (Moves::iterator iter=possible_moves.begin(); iter!=possible_moves.end(); iter++) delete *iter;
+
+		return true;
+	} else {
+		std::cout<<"board full"<<std::endl;
+
+		return false;
+	}
 }
 
 bool BoardC4::check_for_win() const {

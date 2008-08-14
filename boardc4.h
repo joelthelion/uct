@@ -23,10 +23,10 @@ public:
 
 	virtual void print() const;
 	virtual bool is_move_valid(const Move &move) const;
-	virtual Moves get_possible_moves() const; //FIXME not sure about constness
+	virtual Moves get_possible_moves(Token player) const; //FIXME not sure about constness
 	virtual void play_move(const Move &move);
-	virtual void play_random_move(const Move &move);
-	virtual bool check_for_win() const;
+	virtual bool play_random_move(Token player);
+	virtual bool check_for_win() const; //you can't loose when you play a move
 
 protected:
 	Size propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const;
@@ -37,7 +37,7 @@ private:
 	Size width;
 	Size height;
 	Size win_length;
-	Size size;
+	Size size,played_count;
 	Token *flat;
 	Token **token_for_columns;
 	Token **tokens;
