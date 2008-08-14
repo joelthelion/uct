@@ -1,21 +1,26 @@
 #include <iostream>
 #include <vector>
 
-//class definition
+//abstract class definition
+struct Move {
+    virtual void print_move() const =0;
+};
+
 struct Board {
-	struct Move {
-		virtual void print_move() const =0;
-	};
+    typedef ::Move Move;
 
 	virtual void print_board() const =0;
 
 	Move *move;
 };
 
+//class implementation
+struct MoveA: public Move {
+    virtual void print_move() const { std::cout<<"move_a"<<std::endl; }
+};
+
 struct BoardA: public Board {
-	struct Move: public Board::Move {
-		virtual void print_move() const { std::cout<<"move_a"<<std::endl; }
-	};
+    typedef MoveA Move;
 
 	BoardA() : Board() { this->move=new Move(); }
 	~BoardA() { delete this->move; }
@@ -23,7 +28,7 @@ struct BoardA: public Board {
 };
 
 struct BoardB: public Board {
-	struct Move: public Board::Move {
+	struct Move: public ::Move {
 		virtual void print_move() const { std::cout<<"move_b"<<std::endl; }
 	};
 
