@@ -6,38 +6,42 @@
 MoveC4::MoveC4(const Board *abstract_board,Token player,Size column) : Move(abstract_board,player), column(column) {
 	if (abstract_board) {
 		const BoardC4 *board=dynamic_cast<const BoardC4*>(abstract_board);
-		token=board->row_for_columns[column];
-		row=token-board->tokens[column];
+
+		assert(column<board->width);
+		assert(not player==NOT_PLAYED);
+
+		token=board->token_for_columns[column];
 	}
 }
 
 void MoveC4::print() const {
-	std::cout<<"("<<this->row<<","<<this->column<<")";
+	if (board) std::cout<<"column "<<this->column;
+	else std::cout<<"null move";
+	std::cout<<std::endl;
 }
 
-BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NULL,NOT_PLAYED,0) {
-	this->width=width;
-	this->height=height;
-	this->win_length=win_length;
-	this->size=width*height;
+BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NULL,NOT_PLAYED,0), width(width), height(height), win_length(win_length) {
+	size=width*height;
 
 	//allocate flat
-	this->flat=new Token[size];
+	flat=new Token[size];
 	for (Token *iter=flat; iter!=flat+size; iter++) *iter=NOT_PLAYED;
 
 	//allocate column pointer and playable move cache
-	this->tokens=new Token*[width];
-	this->row_for_columns=new Token*[width];
+	tokens=new Token*[width];
+	token_for_columns=new Token*[width];
 	Size k=0;
-	for (Token *iter=flat; iter<=flat+size; iter+=height) {
+	for (Token *iter=flat; iter<flat+size; iter+=height) {
 		tokens[k]=iter;
-		row_for_columns[k]=iter+height-1;
+		token_for_columns[k]=iter+height-1;
 		k++;
 	}
+
+	assert(k==width);
 }
 
 BoardC4::~BoardC4() {
-	delete [] row_for_columns;
+	delete [] token_for_columns;
 	delete [] tokens;
 	delete [] flat;
 }
@@ -54,7 +58,7 @@ void BoardC4::print() const {
 	for (Size row=0; row<height; row++) {
 		std::cout<<row<<"|";
 		for (Size column=0; column<width; column++) {
-			switch(tokens[row][column]) {
+			switch(tokens[column][row]) {
 			case NOT_PLAYED:
 				std::cout<<" ";
 				break;
@@ -80,7 +84,7 @@ void BoardC4::print() const {
 
 bool BoardC4::is_move_valid(const Move &abstract_move) const {
 	const MoveC4 &move=dynamic_cast<const MoveC4&>(abstract_move);
-	return move.row<height and move.column<width and not move.player==NOT_PLAYED and &tokens[move.row][move.column]==row_for_columns[move.column];
+	return move.board==this and move.token==token_for_columns[move.column] and move.token>=tokens[move.column];
 }
 
 Moves BoardC4::get_possible_moves() const {
@@ -93,7 +97,8 @@ void BoardC4::play_move(const Move &abstract_move) {
 
 	assert(this->is_move_valid(move));
 
-	tokens[move.row][move.column]=move.player;
+	*token_for_columns[move.column]=move.player;
+	token_for_columns[move.column]--;
 	lastmove=move;
 }
 

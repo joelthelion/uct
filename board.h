@@ -11,10 +11,9 @@ public:
 	Move(const Board *board,Token player) : board(board), player(player) {}
     virtual void print() const =0;
 
-	Token player;
-
 protected:
 	const Board *board;
+	Token player;
 };
 
 typedef std::vector<Move*> Moves;

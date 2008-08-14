@@ -2,15 +2,16 @@
 #define __BOARDC4__
 
 #include "board.h"
-#include "common.h"
 
 class MoveC4 : public Move {
+friend class BoardC4;
 public:
 	MoveC4(const Board *board,Token player,Size column);
 
     virtual void print() const;
 
-    Size row,column;
+private:
+    Size column;
     const Token *token;
 };
 
@@ -38,7 +39,7 @@ private:
 	Size win_length;
 	Size size;
 	Token *flat;
-	Token **row_for_columns;
+	Token **token_for_columns;
 	Token **tokens;
 };
 
