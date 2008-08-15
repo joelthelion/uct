@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <cstdlib>
 
 MoveC4::MoveC4(const Board *abstract_board,Token player,Size column) : Move(abstract_board,player), column(column) {
 	if (abstract_board) {
