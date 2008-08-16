@@ -6,17 +6,15 @@
 class MoveC4 : public Move {
 friend class BoardC4;
 public:
-	MoveC4(const Board *board,Token player,Size column);
+	MoveC4(Token player,Size column);
 
     virtual void print() const;
 
 private:
     Size column;
-    const Token *token;
 };
 
 class BoardC4 : public Board {
-friend class MoveC4;
 public:
 	BoardC4(Size width=7,Size height=5,Size win_length=4);
 	~BoardC4();

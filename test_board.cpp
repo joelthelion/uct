@@ -4,16 +4,16 @@
 int main(int argc, char *argv[]) {
 	Board *board=new BoardC4;
 
-	board->play_move(MoveC4(board,PLAYER_1,1));
-	board->play_move(MoveC4(board,PLAYER_2,1));
-	board->play_move(MoveC4(board,PLAYER_2,6));
+	board->play_move(MoveC4(PLAYER_1,1));
+	board->play_move(MoveC4(PLAYER_2,1));
+	board->play_move(MoveC4(PLAYER_2,6));
 	board->print();
 
 	Token player;
 	
 	player=PLAYER_1;
 	while (true) {
-		MoveC4 move(board,player,2);
+		MoveC4 move(player,2);
 
 		if (board->is_move_valid(move)) board->play_move(move);
 		else break;

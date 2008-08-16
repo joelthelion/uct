@@ -8,11 +8,10 @@ class Board;
 
 class Move {
 public:
-	Move(const Board *board,Token player) : board(board), player(player) {}
+	Move(Token player) : player(player) {}
     virtual void print() const =0;
 
 protected:
-	const Board *board;
 	Token player;
 };
 

@@ -4,24 +4,14 @@
 #include <cassert>
 #include <cstdlib>
 
-MoveC4::MoveC4(const Board *abstract_board,Token player,Size column) : Move(abstract_board,player), column(column) {
-	if (abstract_board) {
-		const BoardC4 *board=dynamic_cast<const BoardC4*>(abstract_board);
-
-		assert(column<board->width);
-		assert(not player==NOT_PLAYED);
-
-		token=board->token_for_columns[column];
-	}
-}
+MoveC4::MoveC4(Token player,Size column) : Move(player), column(column) {}
 
 void MoveC4::print() const {
-	if (board) std::cout<<"column "<<this->column;
-	else std::cout<<"null move";
-	std::cout<<std::endl;
+	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" for "<<player<<std::endl;
+	else std::cout<<"null move"<<std::endl;
 }
 
-BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NULL,NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
+BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 
 	//allocate flat
 	flat=new Token[size];
@@ -84,14 +74,14 @@ void BoardC4::print() const {
 
 bool BoardC4::is_move_valid(const Move &abstract_move) const {
 	const MoveC4 &move=dynamic_cast<const MoveC4&>(abstract_move);
-	return move.board==this and move.token==token_for_columns[move.column] and move.token>=tokens[move.column];
+	return move.player!=NOT_PLAYED and move.column>=0 and move.column<width and token_for_columns[move.column]>=tokens[move.column];
 }
 
 Moves BoardC4::get_possible_moves(Token player) const {
 	Moves moves;
 	
 	for (Size column=0; column<width; column++) {
-		if (tokens[column]<=token_for_columns[column]) moves.push_back(new MoveC4(this,player,column));
+		if (tokens[column]<=token_for_columns[column]) moves.push_back(new MoveC4(player,column));
 	}
 
 	return moves;
