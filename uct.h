@@ -1,13 +1,13 @@
 #ifndef __UCT__
 #define __UCT__
 
-#include <list>
+#include <vector>
 #include "common.h"
 #include "board.h"
 
 class Node;
 
-typedef std::list<Node*> Nodes;
+typedef std::vector<Node*> Nodes; //FIXME should be a list be implementation is easyer with vector
 
 class Node {
 public:
