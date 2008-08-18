@@ -8,6 +8,7 @@
 class Node;
 
 typedef std::vector<Node*> Nodes; //FIXME should be a list be implementation is easyer with vector
+typedef std::vector<const Node*> ConstNodes;
 
 class Node {
 public:
@@ -19,24 +20,25 @@ public:
     void print_best_branch_down() const;
     void print_branch_up() const;
 
-    Node *get_best_child();
+    const Node *get_best_child() const;
     Token play_random_game(Board *board);
 
 protected:
-    static void print_branch(const Nodes &branch);
+    static void print_branch(const ConstNodes &branch);
 
-    Nodes get_best_branch_down() const;
-    Nodes get_branch_up() const;
+    ConstNodes get_best_branch_down() const;
+    ConstNodes get_branch_up() const;
 
     void update_father(Value value);
     void propagate_winning();
     void recompute_inheritance();
-    void tell_granpa_dad_is_a_looser(Node *dad);
+    void tell_granpa_dad_is_a_looser(const Node *dad);
 
 private:
     Node *father;
     //Nodes good_children;
     Nodes children;
+    Moves unexplored_moves;
 
     Count nb;
     Value value;

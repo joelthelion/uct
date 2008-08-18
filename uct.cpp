@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
+#include <cmath>
 
 Node::Node(const Move &move,Node *father) :  move(move), father(father), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
 
@@ -56,16 +58,16 @@ void Node::print_branch_up() const {
     print_branch(get_branch_up());
 }
 
-Node *Node::get_best_child() {
+const Node *Node::get_best_child() const {
     if (children.empty()) {
         std::cout<<"no children";
         return NULL;
     }
 
     Value best_score=0;
-    Node *best_child=NULL;
+    const Node *best_child=NULL;
 
-    for (Nodes::iterator iter=children.begin(); iter!=children.end(); iter++) {
+    for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
         Node *child=*iter;
 
         if (child->mode==WINNER) return child;
@@ -84,18 +86,97 @@ Node *Node::get_best_child() {
 }
 
 Token Node::play_random_game(Board *board) {
-    return NOT_PLAYED;
+    const Value loose_value=0., draw_value=.5, win_value=1.;
+
+    assert(mode==NORMAL);
+    
+    if (father) board->play_move(move); //root as no move
+
+    if (father and board->check_for_win()) {
+        std::cout<<"win situation detected"<<std::endl;
+        move.print();
+        propagate_winning();
+        return move.player;
+    }
+
+    if (not nb) {
+        unexplored_moves=board->get_possible_moves(move.player);
+
+        Token winner=board->play_random_game();
+
+        assert(not value);
+        if (winner==NOT_PLAYED) value=draw_value;
+        else if (winner==move.player) value=win_value;
+        else value=loose_value;
+        simulation_value=value;
+
+        nb=1;
+
+        update_father(value);
+        return winner;
+    }
+
+    if (not unexplored_moves.empty()) {
+        Move *move=unexplored_moves.back();
+        unexplored_moves.pop_back();
+
+        Node *child=new Node(*move,this);
+        children.push_back(child);
+        return child->play_random_game(board);
+    }
+
+    Value best_score=0;
+    Node *best_child=NULL;
+    for (Nodes::iterator iter=children.begin(); iter!=children.end(); iter++) {
+        Node *child=*iter;
+
+        if (not child->mode==LOOSER and (not best_child or best_score<child->value/child->nb+sqrtf(2.*logf(nb)/child->nb))) {
+             best_score=child->value/child->nb+sqrtf(2.*logf(nb)/child->nb);
+             best_child=child;
+        }
+    }
+
+    if (not best_child) {
+        std::cout<<"no child move possible"<<std::endl;
+        value+=draw_value;
+        nb++;
+        return NOT_PLAYED;
+    }
+
+    return best_child->play_random_game(board);
 }
 
-void Node::print_branch(const Nodes &branch) {
+void Node::print_branch(const ConstNodes &branch) {
+    for (ConstNodes::const_iterator iter=branch.begin(); iter!=branch.end(); iter++) {
+        const Node *node=*iter;
+        node->print();
+        std::cout<<" ";
+    }
+    std::cout<<std::endl;
 }
 
-Nodes Node::get_best_branch_down() const {
-    return Nodes();
+ConstNodes Node::get_best_branch_down() const {
+    ConstNodes branch;
+    const Node *current=this;
+
+    while (current) {
+        branch.push_back(current);
+        current=current->get_best_child();
+    }
+
+    return branch;
 }
 
-Nodes Node::get_branch_up() const {
-    return Nodes();
+ConstNodes Node::get_branch_up() const {
+    ConstNodes branch;
+    const Node *current=this;
+
+    while (current->father) {
+        branch.push_back(current);
+        current=current->father;
+    }
+
+    return branch;
 }
 
 void Node::update_father(Value value) {
@@ -107,11 +188,52 @@ void Node::update_father(Value value) {
 }
 
 void Node::propagate_winning() {
+    mode=WINNER;
+    
+    if (father) {
+        father->mode=LOOSER;
+        if (father->father) {
+            father->father->tell_granpa_dad_is_a_looser(father);
+        }
+    }
 }
 
 void Node::recompute_inheritance() {
+    nb=1;
+    value=simulation_value;
+    for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
+        const Node *child=*iter;
+
+        if (not child->mode==LOOSER) {
+            nb+=child->nb;
+            value+=child->nb-child->value;
+        }
+    }
+
+    if (father) father->recompute_inheritance();
 }
 
-void Node::tell_granpa_dad_is_a_looser(Node *dad) {
+void Node::tell_granpa_dad_is_a_looser(const Node *dad) {
+    Count new_nb=1;
+    Value new_value=simulation_value;
+    for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
+        const Node *child=*iter;
+
+        if (not child->mode==LOOSER) {
+            new_nb+=child->nb;
+            new_value+=child->nb-child->value;
+        }
+    }
+
+    if (new_nb==1) {
+        propagate_winning();
+    } else {
+        nb=new_nb;
+        value=new_value;
+
+        if (father) {
+            father->recompute_inheritance();
+        }
+    }
 }
 

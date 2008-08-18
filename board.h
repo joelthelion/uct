@@ -11,7 +11,6 @@ public:
 	Move(Token player);
     virtual void print() const =0;
 
-protected:
 	Token player;
 };
 
