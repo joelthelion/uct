@@ -7,7 +7,7 @@ PROJECT(uct_bots)
 
 #tests
 ADD_EXECUTABLE(test_nested test_nested.cpp)
-ADD_EXECUTABLE(test_board test_board.cpp boardc4.cpp)
+ADD_EXECUTABLE(test_board test_board.cpp boardc4.cpp board.cpp)
 #TARGET_LINK_LIBRARIES(test_board board)
 
 #production

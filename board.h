@@ -8,7 +8,7 @@ class Board;
 
 class Move {
 public:
-	Move(Token player) : player(player) {}
+	Move(Token player);
     virtual void print() const =0;
 
 protected:
@@ -25,6 +25,7 @@ public:
 	virtual void play_move(const Move &move) =0;
 	virtual bool play_random_move(Token player) =0;
 	virtual bool check_for_win() const =0;
+    virtual Token play_random_game();
 };
 
 #endif
