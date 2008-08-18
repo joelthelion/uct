@@ -19,6 +19,9 @@ void Node::print() const {
     move.print();
 
     std::cout<<","<<children.size()<<" children";
+    std::cout<<","<<unexplored_moves.size()<<" unexplored";
+
+    if (not father) std::cout<<",ROOT";
 
     std::cout<<",";
     switch (mode) {
@@ -43,6 +46,7 @@ void Node::print() const {
 void Node::print_tree(int indent) const {
     for (int k=0; k<indent*2; k++) std::cout<<"-";
     print();
+    std::cout<<std::endl;
 
     for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
         const Node *child=*iter;
@@ -59,10 +63,7 @@ void Node::print_branch_up() const {
 }
 
 const Node *Node::get_best_child() const {
-    if (children.empty()) {
-        std::cout<<"no children";
-        return NULL;
-    }
+    if (children.empty()) return NULL;
 
     Value best_score=0;
     const Node *best_child=NULL;
@@ -95,14 +96,16 @@ Token Node::play_random_game(Board *board) {
     if (father and board->check_for_win()) {
         std::cout<<"win situation detected"<<std::endl;
         move.print();
+        std::cout<<std::endl;
+
         propagate_winning();
         return move.player;
     }
 
     if (not nb) {
-        unexplored_moves=board->get_possible_moves(move.player);
+        unexplored_moves=board->get_possible_moves(other_player(move.player));
 
-        Token winner=board->play_random_game();
+        Token winner=board->play_random_game(other_player(move.player));
 
         assert(not value);
         if (winner==NOT_PLAYED) value=draw_value;
@@ -152,7 +155,6 @@ void Node::print_branch(const ConstNodes &branch) {
         node->print();
         std::cout<<" ";
     }
-    std::cout<<std::endl;
 }
 
 ConstNodes Node::get_best_branch_down() const {

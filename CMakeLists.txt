@@ -9,7 +9,7 @@ ADD_LIBRARY(board  boardc4.cpp board.cpp)
 ADD_EXECUTABLE(test_nested test_nested.cpp)
 
 ADD_EXECUTABLE(test_board test_board.cpp)
-TARGET_LINK_LIBRARIES(test_board board)
+TARGET_LINK_LIBRARIES(test_board board efence)
 
 ADD_EXECUTABLE(test_uct test_uct.cpp uct.cpp)
 TARGET_LINK_LIBRARIES(test_uct board)

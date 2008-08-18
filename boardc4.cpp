@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
 
 MoveC4::MoveC4(Token player,Size column) : Move(player), column(column) {}
 
@@ -34,6 +35,28 @@ BoardC4::~BoardC4() {
 	delete [] token_for_columns;
 	delete [] tokens;
 	delete [] flat;
+}
+
+Board *BoardC4::deepcopy() const {
+    BoardC4 *copy=new BoardC4(width,height,win_length);
+
+    //copy last move and played_count
+    copy->lastmove=lastmove;
+    copy->played_count=played_count;
+
+	//copy flat
+    const Token *current_iter=flat;
+	for (Token *iter=copy->flat; iter!=copy->flat+size; iter++) {
+        *iter=*current_iter;
+        current_iter++;
+    }
+
+	//copy token_for_columns
+    for (int k=0; k<width; k++) {
+        copy->token_for_columns[k]=copy->tokens[k]+(token_for_columns[k]-tokens[k]);
+    }
+
+    return copy;
 }
 
 void BoardC4::print() const {
@@ -110,8 +133,7 @@ bool BoardC4::play_random_move(Token player) {
 
 		return true;
 	} else {
-		std::cout<<"board full"<<std::endl;
-
+		//std::cout<<"board full"<<std::endl;
 		return false;
 	}
 }
