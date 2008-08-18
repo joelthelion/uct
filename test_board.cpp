@@ -23,7 +23,9 @@ int main(int argc, char *argv[]) {
 	board->print();
 
 	player=PLAYER_1;
-	while (board->play_random_move(player)) player=other_player(player);
+	while (board->play_random_move(player) and not board->check_for_win()) {
+        player=other_player(player);
+    }
 	board->print();
 
 	delete board;

@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-typedef unsigned int Size;
+typedef int Size;
 typedef enum {NOT_PLAYED,PLAYER_1,PLAYER_2} Token;
 
 inline Token other_player(Token player) {

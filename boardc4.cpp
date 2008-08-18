@@ -7,7 +7,7 @@
 MoveC4::MoveC4(Token player,Size column) : Move(player), column(column) {}
 
 void MoveC4::print() const {
-	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" for "<<player<<std::endl;
+	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" for player "<<player<<std::endl;
 	else std::cout<<"null move"<<std::endl;
 }
 
@@ -117,10 +117,25 @@ bool BoardC4::play_random_move(Token player) {
 }
 
 bool BoardC4::check_for_win() const {
-	return true;
+    Size column=lastmove.column;
+    Size row=token_for_columns[column]-tokens[column]+1;
+
+    if (propagate(row,column,0,1,lastmove.player)+propagate(row,column,0,-1,lastmove.player)>win_length) return true;
+    if (propagate(row,column,1,0,lastmove.player)+propagate(row,column,-1,0,lastmove.player)>win_length) return true;
+    if (propagate(row,column,1,1,lastmove.player)+propagate(row,column,-1,-1,lastmove.player)>win_length) return true;
+    if (propagate(row,column,1,-1,lastmove.player)+propagate(row,column,-1,1,lastmove.player)>win_length) return true;
+
+	return false;
 }
 
 Size BoardC4::propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const {
-	return 0;
+    Size length=0;
+    while (row>=0 and row<height and column>=0 and column<width and tokens[column][row]==player) {
+        length++;
+        row+=drow;
+        column+=dcolumn;
+    }
+
+	return length;
 }	
 
