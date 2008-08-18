@@ -1,4 +1,4 @@
-#include "board.h"
+#include "uct.h"
 #include "boardc4.h"
 
 #include <iostream>
@@ -7,9 +7,9 @@
 int main(int argc, char *argv[]) {
     srand(time(0));
 
-	Board *board=new BoardC4;
-    board->play_random_game();
-	delete board;
+    Node *root=new Node(MoveC4(PLAYER_1,0));
+    root->print();
+    delete root;
 
 	return 0;
 }

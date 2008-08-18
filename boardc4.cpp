@@ -7,8 +7,8 @@
 MoveC4::MoveC4(Token player,Size column) : Move(player), column(column) {}
 
 void MoveC4::print() const {
-	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" for player "<<player<<std::endl;
-	else std::cout<<"null move"<<std::endl;
+	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" for player "<<player;
+	else std::cout<<"null move";
 }
 
 BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {

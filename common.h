@@ -17,4 +17,8 @@ inline Token other_player(Token player) {
 	}
 }
 
+typedef enum {NORMAL,LOOSER,WINNER} Mode;
+typedef float Value;
+typedef int Count;
+
 #endif
