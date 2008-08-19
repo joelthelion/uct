@@ -24,6 +24,8 @@ public:
     const Node *get_best_child() const;
     Token play_random_game(Board *board,Token player);
 
+    Mode mode; //FIXME
+    const Move *move;
 protected:
     static void print_branch(const ConstNodes &branch);
 
@@ -44,9 +46,7 @@ private:
     Count nb;
     Value value;
     Value simulation_value;
-    Mode mode;
 
-    const Move *move;
 };
 
 #endif
