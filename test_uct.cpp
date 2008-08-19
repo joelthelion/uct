@@ -7,13 +7,13 @@
 int main(int argc, char *argv[]) {
     srand(time(0));
 
-    Node *root=new Node(MoveC4(PLAYER_1,0));
+    Node *root=new Node();
     Board *board=new BoardC4();
 
-    for (int k=0; k<1000; k++) {
+    for (int k=0; k<10000; k++) {
         Board *copy=board->deepcopy();
 
-        Token winner=root->play_random_game(copy);
+        Token winner=root->play_random_game(copy,PLAYER_1);
 
         //copy->print();
         //if (winner==NOT_PLAYED) std::cout<<"draw"<<std::endl;

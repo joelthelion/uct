@@ -12,7 +12,8 @@ typedef std::vector<const Node*> ConstNodes;
 
 class Node {
 public:
-    Node(const Move &move,Node *father=NULL);
+    Node(); //root constructor
+    Node(const Move *move,Node *father=NULL);
     ~Node();
 
     void print() const;
@@ -21,7 +22,7 @@ public:
     void print_branch_up() const;
 
     const Node *get_best_child() const;
-    Token play_random_game(Board *board);
+    Token play_random_game(Board *board,Token player);
 
 protected:
     static void print_branch(const ConstNodes &branch);
@@ -45,7 +46,7 @@ private:
     Value simulation_value;
     Mode mode;
 
-    const Move &move;
+    const Move *move;
 };
 
 #endif

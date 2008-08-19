@@ -5,9 +5,12 @@
 #include <cassert>
 #include <cmath>
 
-Node::Node(const Move &move,Node *father) :  move(move), father(father), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
+Node::Node() : move(new Move()), father(NULL), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
+Node::Node(const Move *move,Node *father) :  move(move), father(father), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
 
 Node::~Node() {
+    delete move;
+
     for (Nodes::iterator iter=children.begin(); iter!=children.end(); iter++) {
         Node *child=*iter;
         delete child;
@@ -16,7 +19,7 @@ Node::~Node() {
 
 void Node::print() const {
     std::cout<<"[";
-    move.print();
+    move->print();
 
     std::cout<<","<<children.size()<<" children";
     std::cout<<","<<unexplored_moves.size()<<" unexplored";
@@ -86,30 +89,38 @@ const Node *Node::get_best_child() const {
     return children[rand() % children.size()];
 }
 
-Token Node::play_random_game(Board *board) {
+Token Node::play_random_game(Board *board,Token player) {
     const Value loose_value=0., draw_value=.5, win_value=1.;
+
+    if (father) assert(player==other_player(move->player));
+    else assert(move->player==NOT_PLAYED);
 
     assert(mode==NORMAL);
     
-    if (father) board->play_move(move); //root as no move
+    if (father) board->play_move(*move); //root as no move
 
     if (father and board->check_for_win()) {
         std::cout<<"win situation detected"<<std::endl;
-        move.print();
+        move->print();
         std::cout<<std::endl;
 
         propagate_winning();
-        return move.player;
+        return move->player;
     }
 
     if (not nb) {
-        unexplored_moves=board->get_possible_moves(other_player(move.player));
-
-        Token winner=board->play_random_game(other_player(move.player));
+        Token winner;
+        if (father) {
+            unexplored_moves=board->get_possible_moves(player);
+            winner=board->play_random_game(player);
+        } else {
+            unexplored_moves=board->get_possible_moves(player);
+            winner=board->play_random_game(player);
+        }
 
         assert(not value);
         if (winner==NOT_PLAYED) value=draw_value;
-        else if (winner==move.player) value=win_value;
+        else if (winner==move->player) value=win_value;
         else value=loose_value;
         simulation_value=value;
 
@@ -123,9 +134,9 @@ Token Node::play_random_game(Board *board) {
         Move *move=unexplored_moves.back();
         unexplored_moves.pop_back();
 
-        Node *child=new Node(*move,this);
+        Node *child=new Node(move,this);
         children.push_back(child);
-        return child->play_random_game(board);
+        return child->play_random_game(board,other_player(player));
     }
 
     Value best_score=0;
@@ -146,7 +157,7 @@ Token Node::play_random_game(Board *board) {
         return NOT_PLAYED;
     }
 
-    return best_child->play_random_game(board);
+    return best_child->play_random_game(board,other_player(player));
 }
 
 void Node::print_branch(const ConstNodes &branch) {

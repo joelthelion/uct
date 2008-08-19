@@ -1,8 +1,14 @@
 #include "board.h"
 
+#include <cassert>
 #include <iostream>
 
+Move::Move() : player(NOT_PLAYED) {}
 Move::Move(Token player) : player(player) {}
+
+void Move::print() const {
+    std::cout<<"null move";
+};
 
 Token Board::play_random_game(Token next_player) {
 

@@ -8,8 +8,9 @@ class Board;
 
 class Move {
 public:
+    Move();
 	Move(Token player);
-    virtual void print() const =0;
+    virtual void print() const;
 
 	Token player;
 };
