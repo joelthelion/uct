@@ -18,11 +18,12 @@ Node::~Node() {
 }
 
 void Node::print() const {
-    std::cout<<"[";
+    std::cout<<"["<<children.size()<<" children";
+    std::cout<<","<<unexplored_moves.size()<<" unexplored";
+
+    std::cout<<",";
     move->print();
 
-    std::cout<<","<<children.size()<<" children";
-    std::cout<<","<<unexplored_moves.size()<<" unexplored";
 
     if (not father) std::cout<<",ROOT";
 
@@ -78,28 +79,37 @@ const Move *Node::get_move() const {
 }
 
 const Node *Node::get_best_child() const {
-    if (children.empty()) return NULL;
+	if (children.empty()) return NULL;
 
-    Value best_score=0;
-    const Node *best_child=NULL;
+	Value best_score=0;
+	const Node *best_child=NULL;
 
-    for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
-        Node *child=*iter;
+	for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
+		Node *child=*iter;
 
-        if (child->mode==WINNER) return child;
+		if (child->mode==WINNER) return child;
 
-        if (child->mode==NORMAL and (not best_child or best_score<child->value/child->nb)) {
-            best_score=child->value/child->nb;
-            best_child=child;
-        }
-    }
+		if (child->mode==NORMAL and (not best_child or best_score<child->value/child->nb)) {
+			best_score=child->value/child->nb;
+			best_child=child;
+		}
+	}
 
-    if (best_child) return best_child;
+	if (best_child) return best_child;
 
-    //no non-losing move, all move moves are marked loosing...
+	//no non-losing move, all move moves are marked loosing...
 	assert(mode==WINNER); //if all child are loosing then this is a winner node
-    //std::cout<<"SEPUKU!!!"<<std::endl;
-    return children[rand() % children.size()];
+	int selected=rand() % children.size();
+
+	//std::cout<<"SEPUKU!!!"<<children.size()<<" "<<selected<<std::endl;
+	//print_tree();
+
+	Nodes::const_iterator selected_iter=children.begin();
+	while (selected>0 and selected_iter!=children.end()) {
+		selected--;
+		selected_iter++;
+	}
+	return *selected_iter;
 }
 
 Token Node::play_random_game(Board *board,Token player) {
@@ -164,7 +174,7 @@ Token Node::play_random_game(Board *board,Token player) {
     }
 
     if (not best_child) {
-        std::cout<<"no child move possible"<<std::endl;
+        //std::cout<<"no child move possible"<<std::endl;
         value+=draw_value;
         nb++;
         return NOT_PLAYED;

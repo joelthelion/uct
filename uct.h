@@ -2,13 +2,14 @@
 #define __UCT__
 
 #include <vector>
+#include <list>
 #include "common.h"
 #include "board.h"
 
 class Node;
 
-typedef std::vector<Node*> Nodes; //FIXME should be a list be implementation is easyer with vector
-typedef std::vector<const Node*> ConstNodes;
+typedef std::list<Node*> Nodes; //FIXME should be a list be implementation is easyer with vector
+typedef std::list<const Node*> ConstNodes;
 
 class Node {
 public:
