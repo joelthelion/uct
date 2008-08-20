@@ -73,11 +73,22 @@ Move *PlayerBot::get_move(const Board *board) const {
 PlayerHuman::PlayerHuman(Token player) : Player("human",player) {}
 
 Move *PlayerHuman::get_move(const Board *board) const {
-	int column;
+	Move *move=NULL;
 
-	std::cout<<"choose move: ";
-	std::cin>>column;
+	while (not move) {
 
-	return new MoveC4(player,column);
+		std::cout<<"choose move: ";
+		char string[MAX_INPUT_LENGTH];
+		std::cin.getline(string,MAX_INPUT_LENGTH);
+
+		if (not std::cin.good()) {
+			std::cout<<std::endl;
+			break;
+		}
+
+		move=board->parse_move_string(player,string);
+	}
+
+	return move;
 }
 

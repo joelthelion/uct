@@ -1,6 +1,7 @@
 #include "boardc4.h"
 
 #include <iostream>
+#include <sstream>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -63,6 +64,23 @@ Board *BoardC4::deepcopy() const {
     }
 
     return copy;
+}
+
+Move *BoardC4::parse_move_string(Token player,const char *string) const {
+	std::stringstream stream(std::stringstream::in | std::stringstream::out);
+	int column=-1;
+
+	stream<<string;
+	stream>>column;
+
+	if (stream.fail()) return NULL;
+
+	Move *move=new MoveC4(player,column);
+
+	if (is_move_valid(*move)) return move;
+
+	delete move;
+	return NULL;
 }
 
 void BoardC4::print() const {

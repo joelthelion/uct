@@ -21,6 +21,7 @@ public:
 	~BoardC4();
 
     virtual Board *deepcopy() const;
+	virtual Move *parse_move_string(Token player,const char *string) const;
 	virtual void print() const;
 	virtual bool is_move_valid(const Move &move) const;
 	virtual Moves get_possible_moves(Token player) const; //FIXME not sure about constness

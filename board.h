@@ -22,6 +22,7 @@ typedef std::vector<Move*> Moves;
 class Board {
 public:
     virtual Board *deepcopy() const =0;
+	virtual Move *parse_move_string(Token player,const char *string) const =0;
 	virtual void print() const =0;
 	virtual bool is_move_valid(const Move &move) const =0;
 	virtual Moves get_possible_moves(Token player) const =0; //FIXME possible constness problem

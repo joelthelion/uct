@@ -14,7 +14,7 @@ public:
 	virtual Move *get_move(const Board *board) const =0;
 
 protected:
-	const std::string &name;
+	std::string name;
 	Token player;
 };
 

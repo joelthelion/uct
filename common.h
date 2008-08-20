@@ -3,6 +3,8 @@
 
 #include <cassert>
 
+#define MAX_INPUT_LENGTH 256
+
 typedef int Size;
 typedef enum {NOT_PLAYED,PLAYER_1,PLAYER_2} Token;
 
