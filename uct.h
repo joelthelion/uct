@@ -24,6 +24,7 @@ public:
     const Node *get_best_child() const;
     Token play_random_game(Board *board,Token player);
 
+	Value get_winning_probability() const;
     Mode mode; //FIXME public read only access
     const Move *move;
 protected:

@@ -65,6 +65,10 @@ void Node::print_branch_up() const {
     print_branch(get_branch_up());
 }
 
+Value Node::get_winning_probability() const {
+	return value/nb;
+}
+
 const Node *Node::get_best_child() const {
     if (children.empty()) return NULL;
 
@@ -85,6 +89,7 @@ const Node *Node::get_best_child() const {
     if (best_child) return best_child;
 
     //no non-losing move, all move moves are marked loosing...
+	assert(mode==WINNER); //if all child are loosing then this is a winner node
     std::cout<<"SEPUKU!!!"<<std::endl;
     return children[rand() % children.size()];
 }
@@ -164,7 +169,8 @@ void Node::print_branch(const ConstNodes &branch) {
     for (ConstNodes::const_iterator iter=branch.begin(); iter!=branch.end(); iter++) {
         const Node *node=*iter;
         node->print();
-        std::cout<<" ";
+        //std::cout<<" ";
+        std::cout<<std::endl;
     }
 }
 
@@ -172,7 +178,7 @@ ConstNodes Node::get_best_branch_down() const {
     ConstNodes branch;
     const Node *current=this;
 
-    while (current) {
+    while (current and not current->mode==WINNER) {
         branch.push_back(current);
         current=current->get_best_child();
     }
@@ -238,7 +244,7 @@ void Node::tell_granpa_dad_is_a_looser(const Node *dad) {
         }
     }
 
-    if (new_nb==1) {
+    if (new_nb==1) { //all child are loosers
         propagate_winning();
     } else {
         nb=new_nb;

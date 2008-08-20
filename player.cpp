@@ -4,8 +4,6 @@
 #include <cassert>
 #include <ctime>
 
-#include "boardc4.h" //FIXME this line can't be here!!!
-
 Player::Player(const std::string &name,Token player) : name(name), player(player) {
 	assert(not player==NOT_PLAYED);
 }
@@ -33,17 +31,17 @@ Move *PlayerBot::get_move(const Board *board) const {
 
 		end=clock();
     }
-    const Move *move=root->get_best_child()->move;
+	const Node *best_child=root->get_best_child();
+    const Move *move=best_child->move;
 
 	//debug report
     //root->print_tree();
     //std::cout<<std::endl;
-    root->print_best_branch_down();
-    std::cout<<std::endl;
-
+    //root->print_best_branch_down();
+    //std::cout<<std::endl;
 
 	//simulation report
-	std::cout<<"simulated "<<k<<" games in "<<float(end-start)/CLOCKS_PER_SEC<<"s"<<std::endl;
+	std::cout<<"simulated "<<k<<" games in "<<float(end-start)/CLOCKS_PER_SEC<<"s win probability "<<best_child->get_winning_probability()<<std::endl;
 
 	//move report
     std::cout<<"playing ";

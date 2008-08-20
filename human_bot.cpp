@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
 
 	Player *player_a=new PlayerHuman(PLAYER_1);
-	Player *player_b=new PlayerBot(PLAYER_2);
+	Player *player_b=new PlayerBot(PLAYER_2,1.5,100);
 
 	Player *player_current=player_a;
 	Player *winner=NULL;
