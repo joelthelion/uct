@@ -22,7 +22,7 @@ Move *PlayerBot::get_move(const Board *board) const {
 	clock_t start=clock(),end=clock();
 	int k;
 
-    for (k=0; k<max_iteration and root->mode==NORMAL and end-start<max_sec*CLOCKS_PER_SEC; k++) {
+    for (k=0; k<max_iteration and root->get_mode()==NORMAL and end-start<max_sec*CLOCKS_PER_SEC; k++) {
         Board *copy=board->deepcopy();
 
         Token winner=root->play_random_game(copy,player);
@@ -32,7 +32,7 @@ Move *PlayerBot::get_move(const Board *board) const {
 		end=clock();
     }
 	const Node *best_child=root->get_best_child();
-    const Move *move=best_child->move;
+    const Move *move=best_child->get_move();
 
 	//debug report
     //root->print_tree();
@@ -45,7 +45,7 @@ Move *PlayerBot::get_move(const Board *board) const {
 
 	//move report
     std::cout<<"playing ";
-	switch (root->mode) {
+	switch (root->get_mode()) {
 	case NORMAL:
 		std::cout<<"normal "<<best_child->get_winning_probability()<<" ";
 		break;

@@ -69,6 +69,14 @@ Value Node::get_winning_probability() const {
 	return value/nb;
 }
 
+Mode Node::get_mode() const {
+	return mode;
+}
+
+const Move *Node::get_move() const {
+	return move;
+}
+
 const Node *Node::get_best_child() const {
     if (children.empty()) return NULL;
 

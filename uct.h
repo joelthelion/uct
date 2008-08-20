@@ -25,8 +25,8 @@ public:
     Token play_random_game(Board *board,Token player);
 
 	Value get_winning_probability() const;
-    Mode mode; //FIXME public read only access
-    const Move *move;
+	Mode get_mode() const;
+	const Move *get_move() const;
 protected:
     static void print_branch(const ConstNodes &branch);
 
@@ -48,6 +48,8 @@ private:
     Value value;
     Value simulation_value;
 
+    Mode mode;
+    const Move *move;
 };
 
 #endif
