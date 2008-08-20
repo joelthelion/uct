@@ -90,7 +90,7 @@ const Node *Node::get_best_child() const {
 
     //no non-losing move, all move moves are marked loosing...
 	assert(mode==WINNER); //if all child are loosing then this is a winner node
-    std::cout<<"SEPUKU!!!"<<std::endl;
+    //std::cout<<"SEPUKU!!!"<<std::endl;
     return children[rand() % children.size()];
 }
 

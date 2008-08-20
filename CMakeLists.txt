@@ -15,8 +15,8 @@ ADD_EXECUTABLE(test_uct test_uct.cpp)
 TARGET_LINK_LIBRARIES(test_uct board)
 
 #production
-#ADD_EXECUTABLE(bot_bot bot_bot.cpp)
-#TARGET_LINK_LIBRARIES(bot_bot uct board player)
+ADD_EXECUTABLE(bot_bot bot_bot.cpp)
+TARGET_LINK_LIBRARIES(bot_bot board)
 
 ADD_EXECUTABLE(human_bot human_bot.cpp)
 TARGET_LINK_LIBRARIES(human_bot board)

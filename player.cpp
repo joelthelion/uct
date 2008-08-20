@@ -41,13 +41,13 @@ Move *PlayerBot::get_move(const Board *board) const {
     //std::cout<<std::endl;
 
 	//simulation report
-	std::cout<<"simulated "<<k<<" games in "<<float(end-start)/CLOCKS_PER_SEC<<"s win probability "<<best_child->get_winning_probability()<<std::endl;
+	std::cout<<"simulated "<<k<<" games in "<<float(end-start)/CLOCKS_PER_SEC<<"s"<<std::endl;
 
 	//move report
     std::cout<<"playing ";
 	switch (root->mode) {
 	case NORMAL:
-		std::cout<<"normal ";
+		std::cout<<"normal "<<best_child->get_winning_probability()<<" ";
 		break;
 	case WINNER:
 		std::cout<<"loosing ";
