@@ -120,7 +120,10 @@ void BoardC4::print() const {
 }
 
 bool BoardC4::is_move_valid(const Move &abstract_move) const {
-	const MoveC4 &move=dynamic_cast<const MoveC4&>(abstract_move);
+	return is_move_valid(dynamic_cast<const MoveC4&>(abstract_move));
+}
+
+bool BoardC4::is_move_valid(const MoveC4 &move) const {
 	return move.player!=NOT_PLAYED and move.column>=0 and move.column<width and token_for_columns[move.column]>=tokens[move.column];
 }
 
