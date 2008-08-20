@@ -24,7 +24,7 @@ public:
     const Node *get_best_child() const;
     Token play_random_game(Board *board,Token player);
 
-    Mode mode; //FIXME
+    Mode mode; //FIXME public read only access
     const Move *move;
 protected:
     static void print_branch(const ConstNodes &branch);

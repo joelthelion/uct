@@ -8,7 +8,12 @@ Move::Move(Token player) : player(player) {}
 
 void Move::print() const {
     std::cout<<"null move";
-};
+}
+
+Move *Move::deepcopy() const {
+	assert(false);
+	return NULL;
+}
 
 Token Board::play_random_game(Token next_player) {
 

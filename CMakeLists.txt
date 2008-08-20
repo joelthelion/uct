@@ -1,8 +1,8 @@
 PROJECT(uct_bots)
 
 #libraries
-ADD_LIBRARY(board uct.cpp boardc4.cpp board.cpp)
-TARGET_LINK_LIBRARIES(board)
+ADD_LIBRARY(board uct.cpp player.cpp boardc4.cpp board.cpp)
+#TARGET_LINK_LIBRARIES(board)
 #ADD_LIBRARY(player player.cpp)
 
 #tests

@@ -9,6 +9,7 @@ public:
 	MoveC4(Token player,Size column);
 
     virtual void print() const;
+	virtual Move *deepcopy() const;
 
 private:
     Size column;

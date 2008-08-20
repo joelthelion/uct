@@ -10,6 +10,8 @@ class Move {
 public:
     Move();
 	Move(Token player);
+
+	virtual Move *deepcopy() const;
     virtual void print() const;
 
 	Token player;

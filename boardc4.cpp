@@ -12,6 +12,12 @@ void MoveC4::print() const {
 	else std::cout<<"null move";
 }
 
+Move *MoveC4::deepcopy() const {
+	Move *copy=new MoveC4(player,column);
+	return copy;
+}
+
+
 BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 
 	//allocate flat
