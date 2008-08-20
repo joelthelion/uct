@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 int main(int argc, char *argv[]) {
-    srand(time(0));
+    srand(time(NULL));
 
 	Board *board=new BoardC4;
     board->play_random_move(PLAYER_1);

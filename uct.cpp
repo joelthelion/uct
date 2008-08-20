@@ -100,9 +100,9 @@ Token Node::play_random_game(Board *board,Token player) {
     if (father) board->play_move(*move); //root as no move
 
     if (father and board->check_for_win()) {
-        std::cout<<"win situation detected"<<std::endl;
-        move->print();
-        std::cout<<std::endl;
+        //std::cout<<"win situation detected"<<std::endl;
+        //move->print();
+        //std::cout<<std::endl;
 
         propagate_winning();
         return move->player;
