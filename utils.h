@@ -4,7 +4,9 @@
 #include "board.h"
 #include "player.h"
 
-Board *choose_game();
+typedef enum {BOARDC4,BOARDC5} Game;
+
+Board *choose_game(Game game);
 Player *play_game(Player *player_a,Player *player_b,Board *board);
 
 #endif

@@ -1,24 +1,24 @@
-#include "boardc4.h"
+#include "boardc5.h"
 
 #include <iostream>
 #include <sstream>
 #include <cassert>
 #include <cstdlib>
 
-MoveC4::MoveC4(Token player,Size column) : Move(player), column(column) {}
+MoveC5::MoveC5(Token player,Size column,Size row) : Move(player), column(column), row(row) {}
 
-void MoveC4::print() const {
-	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" for player "<<player;
-	else std::cout<<"c4 null move";
+void MoveC5::print() const {
+	if (player!=NOT_PLAYED) std::cout<<"column "<<this->column<<" row "<<this->row<<" for player "<<player;
+	else std::cout<<"c5 null move";
 }
 
-Move *MoveC4::deepcopy() const {
-	Move *copy=new MoveC4(player,column);
+Move *MoveC5::deepcopy() const {
+	Move *copy=new MoveC5(player,column,row);
 	return copy;
 }
 
 
-BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
+BoardC5::BoardC5(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 
 	//allocate flat
 	flat=new Token[size];
@@ -26,25 +26,22 @@ BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0
 
 	//allocate column pointer and playable move cache
 	tokens=new Token*[width];
-	token_for_columns=new Token*[width];
 	Size k=0;
 	for (Token *iter=flat; iter<flat+size; iter+=height) {
 		tokens[k]=iter;
-		token_for_columns[k]=iter+height-1;
 		k++;
 	}
 
 	assert(k==width);
 }
 
-BoardC4::~BoardC4() {
-	delete [] token_for_columns;
+BoardC5::~BoardC5() {
 	delete [] tokens;
 	delete [] flat;
 }
 
-Board *BoardC4::deepcopy() const {
-    BoardC4 *copy=new BoardC4(width,height,win_length);
+Board *BoardC5::deepcopy() const {
+    BoardC5 *copy=new BoardC5(width,height,win_length);
 
     //copy last move and played_count
     copy->lastmove=lastmove;
@@ -57,24 +54,19 @@ Board *BoardC4::deepcopy() const {
         current_iter++;
     }
 
-	//copy token_for_columns
-    for (int k=0; k<width; k++) {
-        copy->token_for_columns[k]=copy->tokens[k]+(token_for_columns[k]-tokens[k]);
-    }
-
     return copy;
 }
 
-Move *BoardC4::parse_move_string(Token player,const char *string) const {
+Move *BoardC5::parse_move_string(Token player,const char *string) const {
 	std::stringstream stream(std::stringstream::in | std::stringstream::out);
-	int column=-1;
+	int column=-1,row=-1;
 
 	stream<<string;
-	stream>>column;
+	stream>>column>>row;
 
 	if (stream.fail()) return NULL;
 
-	Move *move=new MoveC4(player,column);
+	Move *move=new MoveC5(player,column,row);
 
 	if (is_move_valid(*move)) return move;
 
@@ -82,7 +74,7 @@ Move *BoardC4::parse_move_string(Token player,const char *string) const {
 	return NULL;
 }
 
-void BoardC4::print() const {
+void BoardC5::print() const {
 	std::cout<<"  ";
 	for (Size column=0; column<width; column++) std::cout<<column;
 	std::cout<<std::endl;
@@ -118,37 +110,35 @@ void BoardC4::print() const {
 	std::cout<<std::endl;
 }
 
-bool BoardC4::is_move_valid(const Move &abstract_move) const {
-	return is_move_valid(dynamic_cast<const MoveC4&>(abstract_move));
+bool BoardC5::is_move_valid(const Move &abstract_move) const {
+	const MoveC5 &move=dynamic_cast<const MoveC5&>(abstract_move);
+	return move.player!=NOT_PLAYED and move.column>=0 and move.column<width and move.row>=0 and move.row<height and tokens[move.column][move.row]==NOT_PLAYED;
 }
 
-bool BoardC4::is_move_valid(const MoveC4 &move) const {
-	return move.player!=NOT_PLAYED and move.column>=0 and move.column<width and token_for_columns[move.column]>=tokens[move.column];
-}
-
-Moves BoardC4::get_possible_moves(Token player) const {
+Moves BoardC5::get_possible_moves(Token player) const {
 	Moves moves;
 	
 	for (Size column=0; column<width; column++) {
-		if (tokens[column]<=token_for_columns[column]) moves.push_back(new MoveC4(player,column));
+		for (Size row=0; row<height; row++) {
+			if (tokens[column][row]==NOT_PLAYED) moves.push_back(new MoveC5(player,column,row));
+		}
 	}
 
 	return moves;
 }
 
-void BoardC4::play_move(const Move &abstract_move) {
-	const MoveC4 &move=dynamic_cast<const MoveC4&>(abstract_move);
+void BoardC5::play_move(const Move &abstract_move) {
+	const MoveC5 &move=dynamic_cast<const MoveC5&>(abstract_move);
 
 	assert(this->is_move_valid(move));
 
-	*token_for_columns[move.column]=move.player;
-	token_for_columns[move.column]--;
+	tokens[move.column][move.row]=move.player;
 
 	played_count++;
 	lastmove=move;
 }
 
-bool BoardC4::play_random_move(Token player) {
+bool BoardC5::play_random_move(Token player) {
 	if (played_count<size) {
 		Moves possible_moves=get_possible_moves(player);
 
@@ -173,13 +163,11 @@ bool BoardC4::play_random_move(Token player) {
 	}
 }
 
-bool BoardC4::check_for_win() const {
+bool BoardC5::check_for_win() const {
     Size column=lastmove.column;
-    Size row=token_for_columns[column]-tokens[column]+1;
+    Size row=lastmove.row;
 
-	assert(propagate(row,column,-1,0,lastmove.player)==1); //move up are never played
-
-    if (propagate(row,column,1,0,lastmove.player)+1>win_length) return true;
+    if (propagate(row,column,1,0,lastmove.player)+propagate(row,column,-1,0,lastmove.player)>win_length) return true;
     if (propagate(row,column,0,1,lastmove.player)+propagate(row,column,0,-1,lastmove.player)>win_length) return true;
     if (propagate(row,column,1,1,lastmove.player)+propagate(row,column,-1,-1,lastmove.player)>win_length) return true;
     if (propagate(row,column,1,-1,lastmove.player)+propagate(row,column,-1,1,lastmove.player)>win_length) return true;
@@ -187,7 +175,7 @@ bool BoardC4::check_for_win() const {
 	return false;
 }
 
-Size BoardC4::propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const {
+Size BoardC5::propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const {
     Size length=0;
     while (row>=0 and row<height and column>=0 and column<width and tokens[column][row]==player) {
         length++;

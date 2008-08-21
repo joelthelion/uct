@@ -2,9 +2,15 @@
 
 #include <iostream>
 #include "boardc4.h"
+#include "boardc5.h"
 
-Board *choose_game() {
-	return new BoardC4();
+Board *choose_game(Game game) {
+	switch (game) {
+	case BOARDC4:
+		return new BoardC4();
+	case BOARDC5:
+		return new BoardC5();
+	}
 }
 
 Player *play_game(Player *player_a,Player *player_b,Board *board) {

@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
 	std::cout.setf(std::ios::fixed,std::ios::floatfield);
     srand(time(NULL));
 
-    Board *board=choose_game();
+    Board *board=choose_game(BOARDC5);
 
 	Player *player_a=new PlayerHuman(PLAYER_1);
 	Player *player_b=new PlayerBot(PLAYER_2);
