@@ -10,8 +10,8 @@ int main(int argc, char *argv[]) {
 
     Board *board=choose_game(BOARDC5);
 
-	Player *player_a=new PlayerBot(PLAYER_1,3);
-	Player *player_b=new PlayerBot(PLAYER_2,1.5);
+	Player *player_a=new PlayerBot(PLAYER_1,1);
+	Player *player_b=new PlayerBot(PLAYER_2,3);
 
 	play_game(player_a,player_b,board);
 
