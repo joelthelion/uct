@@ -1,7 +1,7 @@
 #ifndef __BOARD__
 #define __BOARD__
 
-#include <vector>
+#include <list>
 #include "common.h"
 
 class Board;
@@ -17,7 +17,7 @@ public:
 	Token player;
 };
 
-typedef std::vector<Move*> Moves;
+typedef std::list<Move*> Moves;
 
 class Board {
 public:
