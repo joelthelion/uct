@@ -8,10 +8,8 @@
 int main(int argc, char *argv[]) {
 	std::cout.precision(2);
 	std::cout.setf(std::ios::fixed,std::ios::floatfield);
-	//double seed=time(NULL);
-	double seed=1219315702.00;
-	std::cout<<seed<<std::endl;
-    srand(seed);
+    srand(time(NULL));
+    //srand(1219315702);
 
 	Player *player_a=new PlayerBot(PLAYER_1,1.5);
 	Player *player_b=new PlayerBot(PLAYER_2,1.5,1000);
