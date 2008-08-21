@@ -31,7 +31,14 @@ Move *PlayerBot::get_move(const Board *board) const {
 
 		end=clock();
     }
+
 	const Node *best_child=root->get_best_child();
+	if (not best_child) {
+		delete root;
+		return NULL;
+	}
+
+
     const Move *move=best_child->get_move();
 
 	//debug report
