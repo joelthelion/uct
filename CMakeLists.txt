@@ -1,9 +1,9 @@
 PROJECT(uct_bots)
 
 #libraries
-ADD_LIBRARY(board uct.cpp player.cpp utils.cpp boardc4.cpp boardc5.cpp board.cpp)
-#TARGET_LINK_LIBRARIES(board)
-#ADD_LIBRARY(player player.cpp)
+ADD_LIBRARY(board
+uct.cpp player.cpp utils.cpp
+boardc4.cpp boardc5.cpp boardothello.cpp board.cpp)
 
 #tests
 ADD_EXECUTABLE(test_nested test_nested.cpp)

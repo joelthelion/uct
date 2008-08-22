@@ -3,6 +3,7 @@
 #include <iostream>
 #include "boardc4.h"
 #include "boardc5.h"
+#include "boardothello.h"
 
 Board *choose_game(Game game) {
 	switch (game) {
@@ -10,6 +11,8 @@ Board *choose_game(Game game) {
 		return new BoardC4();
 	case BOARDC5:
 		return new BoardC5();
+	case OTHELLO:
+		return new BoardOthello();
 	}
 }
 

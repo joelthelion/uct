@@ -6,7 +6,7 @@
 class MoveOthello : public Move {
 friend class BoardOthello;
 public:
-	MoveOthello(Token player) //cant play move
+	MoveOthello(Token player); //cant play move
 	MoveOthello(Token player,Size column,Size row);
 
     virtual void print() const;

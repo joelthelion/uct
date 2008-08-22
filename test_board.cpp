@@ -1,5 +1,5 @@
 #include "board.h"
-#include "boardc4.h"
+#include "utils.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -7,8 +7,8 @@
 int main(int argc, char *argv[]) {
     srand(time(NULL));
 
-	Board *board=new BoardC4;
-    board->play_random_move(PLAYER_1);
+	Board *board=choose_game(OTHELLO);
+	board->play_random_move(PLAYER_1);
     board->print();
 
     Board *copy=board->deepcopy();

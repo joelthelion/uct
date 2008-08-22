@@ -1,4 +1,4 @@
-#include "boardc5.h"
+#include "boardothello.h"
 
 #include <iostream>
 #include <sstream>
@@ -23,13 +23,14 @@ void MoveOthello::print() const {
 }
 
 Move *MoveOthello::deepcopy() const {
-	Move *copy=new MoveOthello(player,column,row);
-	copy->can_play=can_play; //FIXME dirty
+	Move *copy=NULL;
+	if (can_play) copy=new MoveOthello(player,column,row); //normal move
+	else copy=new MoveOthello(player); // "cant play" move
 	return copy;
 }
 
 
-BoardOthello::BoardOthello(Size width,Size height) : width(width), height(height), size(width*height), played_count(0), cant_play_count(0), player_1_score(0), player_2_score(0), {
+BoardOthello::BoardOthello(Size width,Size height) : width(width), height(height), size(width*height), played_count(0), cant_play_count(0), player_1_score(0), player_2_score(0) {
 
 	//allocate flat
 	flat=new Token[size];
@@ -139,14 +140,15 @@ void BoardOthello::print() const {
 	std::cout<<std::endl;
 
 	std::cout<<"1: "<<player_1_score<<" 2: "<<player_2_score<<" x: "<<cant_play_count<<std::endl;
+	std::cout<<std::endl;
 }
 
 bool BoardOthello::propagate(Token player, Size column, Size row, Size dcolumn, Size drow) const {
-	Token other_player=other_player(player);
+	Token enemy=other_player(player);
 	Size length=0;
 
 	//check enemy token
-	while (row>=0 and row<height and column>=0 and row<width and tokens[column][row]=other_player) {
+	while (row>=0 and row<height and column>=0 and column<width and tokens[column][row]==enemy) {
 		length++;
 		column+=dcolumn;
 		row+=drow;
@@ -155,7 +157,7 @@ bool BoardOthello::propagate(Token player, Size column, Size row, Size dcolumn, 
 	if (not length) return false;
 
 	//check for a own token at the end
-	if (row>=0 and row<height and column>=0 and row<width and tokens[column][row]=player) return true;
+	if (row>=0 and row<height and column>=0 and column<width and tokens[column][row]==player) return true;
 
 	return false;
 }
@@ -210,11 +212,11 @@ Moves BoardOthello::get_possible_moves(Token player) const {
 }
 
 Size BoardOthello::switch_tokens(Token player,Size column, Size row, Size dcolumn, Size drow) {
-	Token other_player=other_player(player);
+	Token enemy=other_player(player);
 	Size length=0;
 
 	//switch enemy token
-	while (row>=0 and row<height and column>=0 and row<width and tokens[column][row]=other_player) {
+	while (row>=0 and row<height and column>=0 and column<width and tokens[column][row]==enemy) {
 		tokens[column][row]=player;
 		length++;
 		column+=dcolumn;
@@ -233,6 +235,9 @@ void BoardOthello::play_move(const Move &abstract_move) {
 		tokens[move.column][move.row]=move.player;
 		
 		int dscore=0;
+		Token player=move.player;
+		Size column=move.column;
+		Size row=move.row;
 		//horizontal and vertical
 		dscore+=switch_tokens(player,column+1,row,1,0);
 		dscore+=switch_tokens(player,column-1,row,-1,0);
