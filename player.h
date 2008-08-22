@@ -11,6 +11,7 @@ public:
 	Player(const std::string &name,Token player);
 
 	virtual void print() const;
+	Token get_player() const;
 	virtual Move *get_move(const Board *board) const =0;
 
 protected:

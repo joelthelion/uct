@@ -8,6 +8,10 @@ Player::Player(const std::string &name,Token player) : name(name), player(player
 	assert(not player==NOT_PLAYED);
 }
 
+Token Player::get_player() const {
+	return player;
+}
+
 void Player::print() const {
 	std::cout<<name<<" "<<player;
 }

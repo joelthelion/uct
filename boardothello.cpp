@@ -30,7 +30,7 @@ Move *MoveOthello::deepcopy() const {
 }
 
 
-BoardOthello::BoardOthello(Size width,Size height) : width(width), height(height), size(width*height), played_count(0), cant_play_count(0), player_1_score(0), player_2_score(0) {
+BoardOthello::BoardOthello(Size width,Size height) : width(width), height(height), size(width*height), played_count(4), cant_play_count(0), player_1_score(2), player_2_score(2) {
 
 	//allocate flat
 	flat=new Token[size];
@@ -51,6 +51,7 @@ BoardOthello::BoardOthello(Size width,Size height) : width(width), height(height
 	tokens[width/2][height/2]=PLAYER_1;
 	tokens[width/2-1][height/2]=PLAYER_2;
 	tokens[width/2][height/2-1]=PLAYER_2;
+	//score are updated in instance creation
 }
 
 BoardOthello::~BoardOthello() {
@@ -139,7 +140,7 @@ void BoardOthello::print() const {
 	for (Size column=0; column<width; column++) std::cout<<column;
 	std::cout<<std::endl;
 
-	std::cout<<"1: "<<player_1_score<<" 2: "<<player_2_score<<" x: "<<cant_play_count<<std::endl;
+	std::cout<<"1: "<<player_1_score<<" 2: "<<player_2_score<<" x: "<<cant_play_count<<" "<<played_count<<" "<<size<<std::endl;
 	std::cout<<std::endl;
 }
 
@@ -297,7 +298,7 @@ bool BoardOthello::play_random_move(Token player) {
 }
 
 Token BoardOthello::check_for_win() const {
-	if (played_count<size and cant_play_count<3) return NOT_PLAYED; //go on the game isn't finished
+	if (played_count<size and cant_play_count<2) return NOT_PLAYED; //go on the game isn't finished
 	else {
 		if (player_1_score>=player_2_score) return PLAYER_1; //FIXME if score equals player1 win 
 		return PLAYER_2;
