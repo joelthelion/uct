@@ -28,7 +28,7 @@ public:
 	virtual Moves get_possible_moves(Token player) const =0; //FIXME possible constness problem
 	virtual void play_move(const Move &move) =0;
 	virtual bool play_random_move(Token player) =0;
-	virtual bool check_for_win() const =0;
+	virtual Token check_for_win() const =0;
     virtual Token play_random_game(Token next_player);
 };
 

@@ -34,7 +34,8 @@ protected:
     ConstNodes get_branch_up() const;
 
     void update_father(Value value);
-    void propagate_winning();
+    void propagate_winning_to_granpa();
+	void propagate_loosing_to_daddy();
     void recompute_inheritance();
     void tell_granpa_dad_is_a_looser(const Node *dad);
 

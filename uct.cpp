@@ -122,13 +122,16 @@ Token Node::play_random_game(Board *board,Token player) {
     
     if (father) board->play_move(*move); //root as no move
 
-    if (father and board->check_for_win()) {
+    if (father and board->check_for_win()!=NOT_PLAYED) { //FIXME two calls to check_for win
         //std::cout<<"win situation detected"<<std::endl;
         //move->print();
         //std::cout<<std::endl;
 
-        propagate_winning();
-        return move->player;
+		Token winner=board->check_for_win();
+		if (winner==move->player) propagate_winning_to_granpa();
+		else propagate_loosing_to_daddy();
+
+        return winner;
     }
 
     if (not nb) {
@@ -224,7 +227,7 @@ void Node::update_father(Value value) {
     }
 }
 
-void Node::propagate_winning() {
+void Node::propagate_winning_to_granpa() {
     mode=WINNER;
     
     if (father) {
@@ -235,6 +238,13 @@ void Node::propagate_winning() {
     }
 }
 
+void Node::propagate_loosing_to_daddy() {
+    mode=LOOSER;
+    
+    if (father) {
+		father->tell_granpa_dad_is_a_looser(this);
+    }
+}
 void Node::recompute_inheritance() {
     nb=1;
     value=simulation_value;
@@ -263,7 +273,7 @@ void Node::tell_granpa_dad_is_a_looser(const Node *dad) {
     }
 
     if (new_nb==1) { //all child are loosers
-        propagate_winning();
+        propagate_winning_to_granpa();
     } else {
         nb=new_nb;
         value=new_value;

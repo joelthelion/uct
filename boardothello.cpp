@@ -294,8 +294,11 @@ bool BoardOthello::play_random_move(Token player) {
 	return false;
 }
 
-bool BoardOthello::check_for_win() const {
-	if (played_count<size and cant_play_count<3) return false;
-	else return true;
+Token BoardOthello::check_for_win() const {
+	if (played_count<size and cant_play_count<3) return NOT_PLAYED; //go on the game isn't finished
+	else {
+		if (player_1_score>=player_2_score) return PLAYER_1; //FIXME if score equals player1 win 
+		return PLAYER_2;
+	}
 }
 

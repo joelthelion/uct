@@ -32,7 +32,8 @@ Player *play_game(Player *player_a,Player *player_b,Board *board) {
 		delete move;
 
 		//check for win
-		if (board->check_for_win()) {
+		Token winner_token=board->check_for_win();
+		if (winner_token!=NOT_PLAYED) {
 			winner=player_current;
 			break;
 		}

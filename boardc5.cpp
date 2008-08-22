@@ -163,16 +163,16 @@ bool BoardC5::play_random_move(Token player) {
 	}
 }
 
-bool BoardC5::check_for_win() const {
+Token BoardC5::check_for_win() const {
     Size column=lastmove.column;
     Size row=lastmove.row;
 
-    if (propagate(row,column,1,0,lastmove.player)+propagate(row,column,-1,0,lastmove.player)>win_length) return true;
-    if (propagate(row,column,0,1,lastmove.player)+propagate(row,column,0,-1,lastmove.player)>win_length) return true;
-    if (propagate(row,column,1,1,lastmove.player)+propagate(row,column,-1,-1,lastmove.player)>win_length) return true;
-    if (propagate(row,column,1,-1,lastmove.player)+propagate(row,column,-1,1,lastmove.player)>win_length) return true;
+    if (propagate(row,column,1,0,lastmove.player)+propagate(row,column,-1,0,lastmove.player)>win_length) return lastmove.player;
+    if (propagate(row,column,0,1,lastmove.player)+propagate(row,column,0,-1,lastmove.player)>win_length) return lastmove.player;
+    if (propagate(row,column,1,1,lastmove.player)+propagate(row,column,-1,-1,lastmove.player)>win_length) return lastmove.player;
+    if (propagate(row,column,1,-1,lastmove.player)+propagate(row,column,-1,1,lastmove.player)>win_length) return lastmove.player;
 
-	return false;
+	return NOT_PLAYED;
 }
 
 Size BoardC5::propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const {

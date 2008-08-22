@@ -30,7 +30,7 @@ public:
 	virtual Moves get_possible_moves(Token player) const;
 	virtual void play_move(const Move &move);
 	virtual bool play_random_move(Token player);
-	virtual bool check_for_win() const;
+	virtual Token check_for_win() const;
 
 protected:
 	bool propagate(Token player, Size column, Size row, Size dcolumn, Size drow) const;

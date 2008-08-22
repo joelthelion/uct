@@ -173,18 +173,18 @@ bool BoardC4::play_random_move(Token player) {
 	}
 }
 
-bool BoardC4::check_for_win() const {
+Token BoardC4::check_for_win() const {
     Size column=lastmove.column;
     Size row=token_for_columns[column]-tokens[column]+1;
 
 	assert(propagate(row,column,-1,0,lastmove.player)==1); //move up are never played
 
-    if (propagate(row,column,1,0,lastmove.player)+1>win_length) return true;
-    if (propagate(row,column,0,1,lastmove.player)+propagate(row,column,0,-1,lastmove.player)>win_length) return true;
-    if (propagate(row,column,1,1,lastmove.player)+propagate(row,column,-1,-1,lastmove.player)>win_length) return true;
-    if (propagate(row,column,1,-1,lastmove.player)+propagate(row,column,-1,1,lastmove.player)>win_length) return true;
+    if (propagate(row,column,1,0,lastmove.player)+1>win_length) return lastmove.player;
+    if (propagate(row,column,0,1,lastmove.player)+propagate(row,column,0,-1,lastmove.player)>win_length) return lastmove.player;
+    if (propagate(row,column,1,1,lastmove.player)+propagate(row,column,-1,-1,lastmove.player)>win_length) return lastmove.player;
+    if (propagate(row,column,1,-1,lastmove.player)+propagate(row,column,-1,1,lastmove.player)>win_length) return lastmove.player;
 
-	return false;
+	return NOT_PLAYED;
 }
 
 Size BoardC4::propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const {
