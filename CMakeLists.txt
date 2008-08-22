@@ -20,3 +20,12 @@ TARGET_LINK_LIBRARIES(bot_bot board)
 
 ADD_EXECUTABLE(human_bot human_bot.cpp)
 TARGET_LINK_LIBRARIES(human_bot board)
+
+#gui
+FIND_PACKAGE(Qt4 REQUIRED)
+INCLUDE(${QT_USE_FILE})
+
+SET(SRCS bot_bot_gui.cpp)
+QT4_WRAP_CPP(MOC_SRCS ${SRCS})
+ADD_EXECUTABLE(bot_bot_gui ${MOC_SRCS} ${SRCS})
+TARGET_LINK_LIBRARIES(bot_bot_gui board ${QT_LIBRARIES})
