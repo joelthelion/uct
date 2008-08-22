@@ -81,7 +81,7 @@ Board *BoardOthello::deepcopy() const {
 Move *BoardOthello::parse_move_string(Token player,const char *string) const {
 	std::stringstream stream(std::stringstream::in | std::stringstream::out);
 
-	if (std::string(string)=="no") { //no play move
+	if (std::string(string)=="no") { //"no play" move
 		Move *move=new MoveOthello(player); 
 
 		if (is_move_valid(*move)) return move;
@@ -193,8 +193,8 @@ bool BoardOthello::can_play_normal_moves(Token player) const {
 
 bool BoardOthello::is_move_valid(const Move &abstract_move) const {
 	const MoveOthello &move=dynamic_cast<const MoveOthello&>(abstract_move);
-	if (can_play_normal_move_at(move.player,move.column,move.row)) return move.can_play; //if you can play a nomal move then you must
-	else return not move.can_play;
+	if (move.can_play) return can_play_normal_move_at(move.player,move.column,move.row); //just check if move is valid
+	else return not can_play_normal_moves(move.player); //a cant play is invalid if you can play any normal move
 }
 
 Moves BoardOthello::get_possible_moves(Token player) const {

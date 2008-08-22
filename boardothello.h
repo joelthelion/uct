@@ -20,7 +20,7 @@ private:
 
 class BoardOthello : public Board {
 public:
-	BoardOthello(Size width=6,Size height=6);
+	BoardOthello(Size width=8,Size height=8);
 	~BoardOthello();
 
     virtual Board *deepcopy() const;

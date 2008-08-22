@@ -98,6 +98,13 @@ Move *PlayerHuman::get_move(const Board *board) const {
 		move=board->parse_move_string(player,string);
 	}
 
+	if (not move) return NULL;
+
+	//move report
+    std::cout<<"playing move ";
+    move->print();
+    std::cout<<std::endl;
+
 	return move;
 }
 
