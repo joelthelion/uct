@@ -212,6 +212,8 @@ Moves BoardOthello::get_possible_moves(Token player) const {
 }
 
 Size BoardOthello::switch_tokens(Token player,Size column, Size row, Size dcolumn, Size drow) {
+	if (not propagate(player,column,row,dcolumn,drow)) return 0; //FIXME should write a not_propagate for performance
+
 	Token enemy=other_player(player);
 	Size length=0;
 
