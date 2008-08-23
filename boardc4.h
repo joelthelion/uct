@@ -16,6 +16,7 @@ private:
 };
 
 class BoardC4 : public Board {
+friend class QBoardC4;
 public:
 	BoardC4(Size width=7,Size height=5,Size win_length=4);
 	~BoardC4();
