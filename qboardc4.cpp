@@ -1,7 +1,6 @@
 #include "qboardc4.h"
 
 #include <QPainter>
-#include <iostream>
 
 QBoardC4::QBoardC4(QWidget *parent,int cell_size,Size width,Size height,Size win_length) : QWidget(parent),
 board(new BoardC4(width,height,win_length)), cell_size(cell_size), border_size(20), cell_border(15) {
@@ -52,7 +51,6 @@ void QBoardC4::paintEvent(QPaintEvent * event) {
 			y+=cell_size;
 		}
 		x+=cell_size;
-		std::cout<<x<<" ";
 	}
 }
 
