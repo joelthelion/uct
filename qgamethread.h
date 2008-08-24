@@ -17,6 +17,9 @@ public:
 protected:
 	virtual void run();
 
+signals:
+	void move_played();
+
 private:
 	Player *player_a;
 	Player *player_b;

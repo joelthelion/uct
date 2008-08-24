@@ -14,6 +14,7 @@ int main(int argc,char *argv[]) {
 	Player *player_b=new PlayerBot(PLAYER_2,3);
 
 	QGameThread game(player_a,player_b,widget.board);
+	QObject::connect(&game,SIGNAL(move_played()),&widget,SLOT(update()));
 
 	//widget.board->play_move(MoveC4(PLAYER_1,3));
 	//widget.board->play_move(MoveC4(PLAYER_2,3));
