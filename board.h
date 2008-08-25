@@ -21,6 +21,8 @@ typedef std::list<Move*> Moves;
 
 class Board {
 public:
+    virtual ~Board() =0;
+
     virtual Board *deepcopy() const =0;
 	virtual Move *parse_move_string(Token player,const char *string) const =0;
 	virtual void print() const =0;

@@ -21,7 +21,7 @@ private:
 class BoardOthello : public Board {
 public:
 	BoardOthello(Size width=8,Size height=8);
-	~BoardOthello();
+	virtual ~BoardOthello();
 
     virtual Board *deepcopy() const;
 	virtual Move *parse_move_string(Token player,const char *string) const;

@@ -18,8 +18,8 @@ private:
 class BoardC4 : public Board {
 friend class QBoardC4;
 public:
-	BoardC4(Size width=7,Size height=5,Size win_length=4);
-	~BoardC4();
+	BoardC4(Size width=7,Size height=6,Size win_length=4);
+	virtual ~BoardC4();
 
     virtual Board *deepcopy() const;
 	virtual Move *parse_move_string(Token player,const char *string) const;

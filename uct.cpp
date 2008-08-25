@@ -15,6 +15,11 @@ Node::~Node() {
         Node *child=*iter;
         delete child;
     }
+
+    for (Moves::iterator iter=unexplored_moves.begin(); iter!=unexplored_moves.end(); iter++) {
+        Move *move=*iter;
+        delete move;
+    }
 }
 
 void Node::print() const {
@@ -136,13 +141,8 @@ Token Node::play_random_game(Board *board,Token player) {
 
     if (not nb) {
         Token winner;
-        if (father) {
-            unexplored_moves=board->get_possible_moves(player);
-            winner=board->play_random_game(player);
-        } else {
-            unexplored_moves=board->get_possible_moves(player);
-            winner=board->play_random_game(player);
-        }
+        unexplored_moves=board->get_possible_moves(player);
+        winner=board->play_random_game(player);
 
         assert(not value);
         if (winner==NOT_PLAYED) value=draw_value;

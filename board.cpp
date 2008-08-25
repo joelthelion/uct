@@ -15,6 +15,8 @@ Move *Move::deepcopy() const {
 	return NULL;
 }
 
+Board::~Board() {}
+
 Token Board::play_random_game(Token next_player) {
 
     Token winner=NOT_PLAYED;

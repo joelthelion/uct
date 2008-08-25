@@ -19,7 +19,7 @@ private:
 class BoardC5 : public Board {
 public:
 	BoardC5(Size width=6,Size height=6,Size win_length=4);
-	~BoardC5();
+	virtual ~BoardC5();
 
     virtual Board *deepcopy() const;
 	virtual Move *parse_move_string(Token player,const char *string) const;

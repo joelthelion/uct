@@ -1,4 +1,5 @@
 PROJECT(uct_bots)
+cmake_minimum_required(VERSION 2.6)
 
 #libraries
 ADD_LIBRARY(board
