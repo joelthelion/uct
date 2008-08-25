@@ -162,7 +162,7 @@ bool BoardC4::play_random_move(Token player) {
 	if (played_count<size) {
 		Moves possible_moves=get_possible_moves(player);
 
-		int selected=rand() % possible_moves.size();
+		int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
 		Moves::const_iterator selected_iter=possible_moves.begin();
 		while (selected>0) {
 			selected--;
