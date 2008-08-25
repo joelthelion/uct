@@ -5,6 +5,14 @@
 #include "boardc5.h"
 #include "boardothello.h"
 
+Game parse_game(const char *arg) {
+    std::string string(arg);
+    if (string=="connect4") return BOARDC4;
+    else if (string=="connect5") return BOARDC5;
+    else if (string=="othello") return OTHELLO;
+    else return OTHELLO;
+}
+
 Board *choose_game(Game game) {
 	std::cout<<"let's play ";
 	switch (game) {

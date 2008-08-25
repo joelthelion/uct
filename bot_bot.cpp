@@ -9,7 +9,9 @@ int main(int argc, char *argv[]) {
 	std::cout.setf(std::ios::fixed,std::ios::floatfield);
     srand(time(NULL));
 
-    Board *board=choose_game(BOARDC4);
+    Game game=OTHELLO;
+    if (argc>1) game=parse_game(argv[1]);
+    Board *board=choose_game(game);
 
 	Player *player_a=new PlayerBot(PLAYER_1,1);
 	Player *player_b=new PlayerBot(PLAYER_2,3);
