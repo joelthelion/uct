@@ -22,6 +22,25 @@ Node::~Node() {
     }
 }
 
+Node * Node::advance_and_detach(const Move * move) {
+	assert(not this->father);
+	Node * new_root=NULL;
+	for (Nodes::iterator iter=children.begin();iter!=children.end();iter++)
+		if ((*iter)->move->compare(*move))
+		{
+			new_root=*iter;
+			new_root->father=NULL;
+			this->children.erase(iter);
+			break;
+		}
+	delete this;
+	if (new_root)
+		return new_root;
+	else
+		return new Node();
+}
+
+
 void Node::print() const {
     std::cout<<"["<<children.size()<<" children";
     std::cout<<","<<unexplored_moves.size()<<" unexplored";
@@ -121,7 +140,7 @@ Token Node::play_random_game(Board *board,Token player) {
     const Value loose_value=0., draw_value=.5, win_value=1.;
 
     if (father) assert(player==other_player(move->player));
-    else assert(move->player==NOT_PLAYED);
+    //else assert(move->player==NOT_PLAYED);
 
     assert(mode==NORMAL);
     

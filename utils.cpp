@@ -32,13 +32,15 @@ Player *play_game(Player *player_a,Player *player_b,Board *board) {
 	//FIXME check if there is a player one and a player two
 	Player *player_current=player_a;
 	Player *winner=NULL;
+	Move * last_move=NULL;
 
 	while (true) {
 		board->print();
 
 		//get the move
-		Move *move=player_current->get_move(board);
+		Move *move=player_current->get_move(board,last_move);
 		if (not move) break;
+		last_move=move;
 
 		//actually play the move
 		board->play_move(*move);

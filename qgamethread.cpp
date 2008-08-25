@@ -10,6 +10,7 @@ void QGameThread::run() {
 
 	Player *player_current=player_a;
 	Player *winner=NULL;
+	Move * last_move=NULL;
 
 	mutex.lock();
 	while (not abort) {
@@ -19,8 +20,9 @@ void QGameThread::run() {
 		copy->print();
 
 		//get the move
-		Move *move=player_current->get_move(copy);
+		Move *move=player_current->get_move(copy,last_move);
 		if (not move) break;
+		last_move=move;
 
 		//actually play the move
 		mutex.lock();

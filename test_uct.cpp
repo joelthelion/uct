@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     board->print();
 
 	//get the move
-	Move *move=bot->get_move(board);
+	Move *move=bot->get_move(board,NULL);
 	//actually play the move
     board->play_move(*move);
 	delete move;

@@ -18,10 +18,11 @@ void Player::print() const {
 
 
 
-PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration) {}
+PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node()) {}
 
-Move *PlayerBot::get_move(const Board *board) const {
-    Node *root=new Node();
+Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
+	if (last_move)
+		root=root->advance_and_detach(last_move);
 
 	clock_t start=clock(),end=clock();
 	int k;
@@ -46,10 +47,10 @@ Move *PlayerBot::get_move(const Board *board) const {
     const Move *move=best_child->get_move();
 
 	//debug report
-    //root->print_tree();
-    //std::cout<<std::endl;
-    //root->print_best_branch_down();
-    //std::cout<<std::endl;
+    root->print_tree();
+    std::cout<<std::endl;
+    root->print_best_branch_down();
+    std::cout<<std::endl;
 
 	//simulation report
 	std::cout<<"simulated "<<k<<" games in "<<float(end-start)/CLOCKS_PER_SEC<<"s"<<std::endl;
@@ -72,16 +73,19 @@ Move *PlayerBot::get_move(const Board *board) const {
     std::cout<<std::endl;
 
 	Move *copy=move->deepcopy();
-	delete root;
+	root=root->advance_and_detach(move);
+	//delete root;
 
 	return copy;
 }
 
-
+PlayerBot::~PlayerBot() {
+	delete root;
+}
 
 PlayerHuman::PlayerHuman(Token player) : Player("human",player) {}
 
-Move *PlayerHuman::get_move(const Board *board) const {
+Move *PlayerHuman::get_move(const Board *board,const Move * last_move) {
 	Move *move=NULL;
 
 	while (not move) {

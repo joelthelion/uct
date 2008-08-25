@@ -12,7 +12,8 @@ public:
 
 	virtual void print() const;
 	Token get_player() const;
-	virtual Move *get_move(const Board *board) const =0;
+	virtual Move *get_move(const Board *board,const Move * last_move) =0;
+	virtual ~Player() {}
 
 protected:
 	std::string name;
@@ -23,18 +24,20 @@ class PlayerBot : public Player {
 public:
 	PlayerBot(Token player,double max_sec=1.5,int max_iteration=50e3);
 
-	virtual Move *get_move(const Board *board) const;
+	virtual Move *get_move(const Board *board,const Move * last_move) ;
+	virtual ~PlayerBot();
 
 private:
 	double max_sec;
 	int max_iteration;
+	Node * root;
 };
 
 class PlayerHuman : public Player {
 public:
 	PlayerHuman(Token player);
 
-	virtual Move *get_move(const Board *board) const;
+	virtual Move *get_move(const Board *board,const Move * last_move) ;
 };
 
 #endif

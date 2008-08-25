@@ -17,6 +17,11 @@ Move *MoveC4::deepcopy() const {
 	return copy;
 }
 
+bool MoveC4::compare (const Move& move) const {
+	move.print();
+	this->print();
+	return Move::compare(move) and column==dynamic_cast<const MoveC4&>(move).column;
+}
 
 BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 

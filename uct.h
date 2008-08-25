@@ -27,6 +27,7 @@ public:
 	Value get_winning_probability() const;
 	Mode get_mode() const;
 	const Move *get_move() const;
+	Node * advance_and_detach(const Move * move);
 protected:
     static void print_branch(const ConstNodes &branch);
 
