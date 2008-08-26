@@ -2,14 +2,17 @@
 #define __QBOARDC4__
 
 #include <QWidget>
+#include <QMutex>
 #include <QPaintEvent>
 #include "boardc4.h"
 
 class QBoardC4 : public QWidget {
 Q_OBJECT
 public:
-	QBoardC4(QWidget *parent=0,int cell_size=100,Size width=7,Size height=5,Size win_length=4);
+	QBoardC4(QMutex *mutex,int cell_size=100,Size width=7,Size height=5,Size win_length=4);
 	~QBoardC4();
+
+    void reset_board();
 
 	BoardC4 *board;
 
@@ -17,9 +20,11 @@ protected:
 	virtual void paintEvent(QPaintEvent * event);
 
 private:
+    QMutex *mutex;
 	int cell_size;
 	int cell_border;
 	int border_size;
+    Size width,height,win_length;
 };
 
 

@@ -9,11 +9,11 @@
 class QGameThread : public QThread {
 Q_OBJECT
 public:
-   	QGameThread(Player *player_a,Player *player_b,Board *board);
+   	QGameThread(QMutex *mutex,Player *player_a,Player *player_b,Board *board);
 
-	QMutex mutex;
-	bool abort;
+    void set_abort(bool new_abort);
 
+	Player *winner;
 protected:
 	virtual void run();
 
@@ -21,9 +21,11 @@ signals:
 	void move_played();
 
 private:
+	QMutex *mutex;
+	bool abort;
+
 	Player *player_a;
 	Player *player_b;
-	Player *winner;
 	Board *board;
 };
 
