@@ -29,6 +29,12 @@ Move *MoveOthello::deepcopy() const {
 	return copy;
 }
 
+bool MoveOthello::compare(const Move& abstract_move) const {
+    const MoveOthello &move=dynamic_cast<const MoveOthello&>(abstract_move);
+	return Move::compare(abstract_move) and column==move.column and row==move.row and can_play==move.can_play;
+}
+
+ 
 
 BoardOthello::BoardOthello(Size width,Size height) : width(width), height(height), size(width*height), played_count(4), cant_play_count(0), player_1_score(2), player_2_score(2) {
 
@@ -141,7 +147,6 @@ void BoardOthello::print() const {
 	std::cout<<std::endl;
 
 	std::cout<<"1: "<<player_1_score<<" 2: "<<player_2_score<<" x: "<<cant_play_count<<" "<<played_count<<" "<<size<<std::endl;
-	std::cout<<std::endl;
 }
 
 bool BoardOthello::propagate(Token player, Size column, Size row, Size dcolumn, Size drow) const {

@@ -13,7 +13,7 @@ public:
 
 	virtual Move *deepcopy() const;
     virtual void print() const;
-	virtual bool compare (const Move& move) const {return (&move and this->player == move.player);}
+	virtual bool compare(const Move& move) const;
 
 	Token player;
 };

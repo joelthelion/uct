@@ -8,6 +8,7 @@ friend class BoardOthello;
 public:
 	MoveOthello(Token player); //cant play move
 	MoveOthello(Token player,Size column,Size row);
+	virtual bool compare(const Move& move) const;
 
     virtual void print() const;
 	virtual Move *deepcopy() const;

@@ -17,6 +17,11 @@ Move *MoveC5::deepcopy() const {
 	return copy;
 }
 
+bool MoveC5::compare(const Move& abstract_move) const {
+    const MoveC5 &move=dynamic_cast<const MoveC5&>(abstract_move);
+	return Move::compare(abstract_move) and column==move.column and row==move.row;
+}
+
 
 BoardC5::BoardC5(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 

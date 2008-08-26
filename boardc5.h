@@ -10,6 +10,7 @@ public:
 
     virtual void print() const;
 	virtual Move *deepcopy() const;
+	virtual bool compare(const Move& move) const;
 
 private:
     Size column;

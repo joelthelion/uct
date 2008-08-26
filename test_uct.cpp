@@ -1,4 +1,4 @@
-#include "uct.h"
+#include "utils.h"
 #include "boardc4.h"
 #include "player.h"
 
@@ -10,22 +10,16 @@ int main(int argc, char *argv[]) {
 	std::cout.setf(std::ios::fixed,std::ios::floatfield);
     srand(time(NULL));
 
-	Player *bot=new PlayerBot(PLAYER_1);
     Board *board=new BoardC4();
 
+	Player *player_a=new PlayerBot(PLAYER_1,1,100);
+	Player *player_b=new PlayerBot(PLAYER_2,3,100);
 
-    board->print();
-
-	//get the move
-	Move *move=bot->get_move(board,NULL);
-	//actually play the move
-    board->play_move(*move);
-	delete move;
-
-    board->print();
+    play_game(player_a,player_b,board,6);
 
     delete board;
-	delete bot;
+    delete player_a;
+    delete player_b;
 
 	return 0;
 }

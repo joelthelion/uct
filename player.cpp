@@ -21,39 +21,39 @@ void Player::print() const {
 PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node()) {}
 
 Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
-	if (last_move)
-		root=root->advance_and_detach(last_move);
+    //std::cout<<"playing enemy move"<<std::endl;
+    //root->print_tree();
+
+    //reuse last simulations if possibles
+	if (last_move) root=root->advance_and_detach(last_move);
+    Count saved_simulations=root->get_nb();
+
+    //std::cout<<"before simulations"<<std::endl;
+    //root->print_tree();
 
 	clock_t start=clock(),end=clock();
 	int k;
-
     for (k=0; k<max_iteration and root->get_mode()==NORMAL and end-start<max_sec*CLOCKS_PER_SEC; k++) {
         Board *copy=board->deepcopy();
-
         Token winner=root->play_random_game(copy,player);
-
         delete copy;
 
 		end=clock();
     }
 
 	const Node *best_child=root->get_best_child();
-	if (not best_child) {
-		delete root;
-		return NULL;
-	}
-
+	if (not best_child) return NULL;
 
     const Move *move=best_child->get_move();
 
 	//debug report
-    root->print_tree();
-    std::cout<<std::endl;
-    root->print_best_branch_down();
-    std::cout<<std::endl;
+    //std::cout<<"after simulations"<<std::endl;
+    //root->print_tree();
+    //root->print_best_branch_down();
+    //std::cout<<std::endl;
 
 	//simulation report
-	std::cout<<"simulated "<<k<<" games in "<<float(end-start)/CLOCKS_PER_SEC<<"s"<<std::endl;
+	std::cout<<"simulated "<<k<<" games ("<<saved_simulations<<" saved) in "<<float(end-start)/CLOCKS_PER_SEC<<"s"<<std::endl;
 
 	//move report
     std::cout<<"playing ";
@@ -72,10 +72,13 @@ Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
     move->print();
     std::cout<<std::endl;
 
-	Move *copy=move->deepcopy();
+    //play best_move
 	root=root->advance_and_detach(move);
-	//delete root;
+    //std::cout<<"after playing best_move"<<std::endl;
+    //root->print_tree();
 
+
+	Move *copy=move->deepcopy();
 	return copy;
 }
 

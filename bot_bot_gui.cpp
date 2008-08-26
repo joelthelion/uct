@@ -10,7 +10,7 @@ int main(int argc,char *argv[]) {
 	QBoardC4 widget;
 	widget.show();
 
-	Player *player_a=new PlayerBot(PLAYER_1,1);
+	Player *player_a=new PlayerBot(PLAYER_1,1,10000);
 	Player *player_b=new PlayerBot(PLAYER_2,3);
 
 	QGameThread game(player_a,player_b,widget.board);

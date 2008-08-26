@@ -17,11 +17,13 @@ Move *MoveC4::deepcopy() const {
 	return copy;
 }
 
-bool MoveC4::compare (const Move& move) const {
-	move.print();
-	this->print();
-	return Move::compare(move) and column==dynamic_cast<const MoveC4&>(move).column;
+bool MoveC4::compare (const Move& abstract_move) const {
+    const MoveC4 &move=dynamic_cast<const MoveC4&>(abstract_move);
+	return Move::compare(abstract_move) and column==move.column;
 }
+
+
+
 
 BoardC4::BoardC4(Size width,Size height,Size win_length) : lastmove(NOT_PLAYED,0), width(width), height(height), win_length(win_length), size(width*height), played_count(0) {
 
@@ -69,6 +71,9 @@ Board *BoardC4::deepcopy() const {
 
     return copy;
 }
+
+
+
 
 Move *BoardC4::parse_move_string(Token player,const char *string) const {
 	std::stringstream stream(std::stringstream::in | std::stringstream::out);

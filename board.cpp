@@ -15,6 +15,10 @@ Move *Move::deepcopy() const {
 	return NULL;
 }
 
+bool Move::compare(const Move &move) const {
+    return this->player==move.player;
+}
+
 Board::~Board() {}
 
 Token Board::play_random_game(Token next_player) {

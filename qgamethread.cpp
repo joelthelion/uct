@@ -5,23 +5,19 @@
 QGameThread::QGameThread(Player *player_a,Player *player_b,Board *board) : QThread(), player_a(player_a), player_b(player_b), board(board), abort(false), mutex() {}
 
 void QGameThread::run() {
-	std::cout<<"hello"<<std::endl;
-	std::cout.flush();
-
 	Player *player_current=player_a;
 	Player *winner=NULL;
-	Move * last_move=NULL;
+	Move *last_move=NULL;
 
 	mutex.lock();
 	while (not abort) {
 		Board *copy=board->deepcopy();
 		mutex.unlock();
 
-		copy->print();
-
 		//get the move
 		Move *move=player_current->get_move(copy,last_move);
 		if (not move) break;
+        if (last_move) delete last_move;
 		last_move=move;
 
 		//actually play the move
@@ -30,7 +26,6 @@ void QGameThread::run() {
 		mutex.unlock();
 		emit move_played();
 		copy->play_move(*move);
-		delete move;
 
 		//check for win
 		Token winner_token=copy->check_for_win();
@@ -48,10 +43,9 @@ void QGameThread::run() {
 
 		mutex.lock();
 	}
-	Board *copy=board->deepcopy();
 	mutex.unlock();
+    if (last_move) delete last_move;
 
-    copy->print();
 	if (winner) {
 		std::cout<<"winner: ";
 		winner->print();
@@ -59,7 +53,5 @@ void QGameThread::run() {
 		std::cout<<"draw";
 	}
 	std::cout<<std::endl;
-
-	delete copy;
 }
 

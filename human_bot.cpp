@@ -15,12 +15,12 @@ int main(int argc, char *argv[]) {
 
 	Player *player_a;
 	Player *player_b;
-    if (argc>1) {
-        player_a=new PlayerBot(PLAYER_1,7,6e2);
+    if (argc>2) {
+        player_a=new PlayerBot(PLAYER_1,7);
         player_b=new PlayerHuman(PLAYER_2);
     } else {
         player_a=new PlayerHuman(PLAYER_1);
-        player_b=new PlayerBot(PLAYER_2,7,6e2);
+        player_b=new PlayerBot(PLAYER_2,7);
     }
 
 

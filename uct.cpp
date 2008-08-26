@@ -22,22 +22,21 @@ Node::~Node() {
     }
 }
 
-Node * Node::advance_and_detach(const Move * move) {
-	assert(not this->father);
-	Node * new_root=NULL;
-	for (Nodes::iterator iter=children.begin();iter!=children.end();iter++)
-		if ((*iter)->move->compare(*move))
-		{
+Node * Node::advance_and_detach(const Move *move) {
+	assert(not father);
+	Node *new_root=NULL;
+	for (Nodes::iterator iter=children.begin();iter!=children.end();iter++) {
+		if ((*iter)->move->compare(*move)) {
 			new_root=*iter;
 			new_root->father=NULL;
 			this->children.erase(iter);
 			break;
-		}
-	delete this;
-	if (new_root)
-		return new_root;
-	else
-		return new Node();
+        }
+	}
+	
+    delete this;
+	if (new_root) return new_root;
+    else return new Node();
 }
 
 
@@ -96,6 +95,10 @@ Value Node::get_winning_probability() const {
 
 Mode Node::get_mode() const {
 	return mode;
+}
+
+Count Node::get_nb() const {
+    return nb;
 }
 
 const Move *Node::get_move() const {
