@@ -9,12 +9,9 @@
 class QBoardC4 : public QWidget {
 Q_OBJECT
 public:
-	QBoardC4(QMutex *mutex,int cell_size=100,Size width=7,Size height=5,Size win_length=4);
-	~QBoardC4();
+	QBoardC4(QMutex *mutex,Board *board,int cell_size=100);
 
-    void reset_board();
-
-	BoardC4 *board;
+	Board *board;
 
 protected:
 	virtual void paintEvent(QPaintEvent * event);

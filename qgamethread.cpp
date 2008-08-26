@@ -21,7 +21,10 @@ void QGameThread::run() {
 
 		//get the move
 		Move *move=player_current->get_move(copy,last_move);
-		if (not move) break;
+		if (not move) {
+			mutex->lock();
+			break;
+		}
         if (last_move) delete last_move;
 		last_move=move;
 
@@ -37,6 +40,7 @@ void QGameThread::run() {
 		if (winner_token!=NOT_PLAYED) {
 			if (winner_token==player_a->get_player()) winner=player_a;
 			else winner=player_b;
+			mutex->lock();
 			break;
 		}
 

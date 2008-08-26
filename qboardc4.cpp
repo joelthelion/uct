@@ -2,21 +2,11 @@
 
 #include <QPainter>
 
-QBoardC4::QBoardC4(QMutex *mutex,int cell_size,Size width,Size height,Size win_length) : QWidget(), mutex(mutex),
-board(new BoardC4(width,height,win_length)), cell_size(cell_size), border_size(20), cell_border(15), width(width), height(height), win_length(win_length) {
-	setFixedSize(cell_size*width+2*border_size,cell_size*height+2*border_size);
-}
-
-QBoardC4::~QBoardC4() {
-	delete board;
-}
-
-void QBoardC4::reset_board() {
-    if (board->played_count) {
-        delete board;
-        board=new BoardC4(width,height,win_length);
-        update();
-    }
+QBoardC4::QBoardC4(QMutex *mutex,Board *abstract_board,int cell_size) : QWidget(), mutex(mutex),
+board(abstract_board), cell_size(cell_size), border_size(20), cell_border(15) {
+	assert(board);
+    BoardC4 *local_board=dynamic_cast<BoardC4*>(board->deepcopy());
+	setFixedSize(cell_size*local_board->width+2*border_size,cell_size*local_board->height+2*border_size);
 }
 
 void QBoardC4::paintEvent(QPaintEvent * event) {

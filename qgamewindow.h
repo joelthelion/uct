@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include "qboardc4.h"
 #include "qgamethread.h"
+#include "board.h"
 #include "player.h"
 
 class QPlayer : public QGroupBox {
@@ -17,9 +18,14 @@ public:
     QPlayer(Token player);
 
     Player *get_player() const;
+
+protected slots:
+	void update_desc();
+
 private:
     QSlider time,iter;
     Token player;
+	QLabel desc;
 };
     
 class QGameWindow : public QMainWindow {
@@ -36,9 +42,10 @@ private:
     QMutex mutex;
     QPushButton start;
     QLabel winner_label;
-    QBoardC4 board_widget;
     QPlayer qplayer_a,qplayer_b;
+    QBoardC4 *board_widget;
     Player *player_a,*player_b;
+	Board *board;
 
     QGameThread *thread;
 };
