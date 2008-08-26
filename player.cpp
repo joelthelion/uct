@@ -18,7 +18,7 @@ void Player::print() const {
 
 
 
-PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node()) {}
+PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration,double uct_constant) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node(uct_constant)) {}
 
 Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
     //std::cout<<"playing enemy move"<<std::endl;

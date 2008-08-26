@@ -5,8 +5,8 @@
 #include <cassert>
 #include <cmath>
 
-Node::Node() : move(new Move()), father(NULL), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
-Node::Node(const Move *move,Node *father) :  move(move), father(father), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
+Node::Node(double uct_constant) : move(new Move()), father(NULL), uct_constant(uct_constant), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
+Node::Node(const Move *move,double uct_constant,Node *father) :  move(move), father(father), uct_constant(uct_constant), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
 
 Node::~Node() {
     delete move;
@@ -36,7 +36,7 @@ Node * Node::advance_and_detach(const Move *move) {
 	
     delete this;
 	if (new_root) return new_root;
-    else return new Node();
+    else return new Node(uct_constant);
 }
 
 
@@ -182,7 +182,7 @@ Token Node::play_random_game(Board *board,Token player) {
         Move *move=unexplored_moves.back();
         unexplored_moves.pop_back();
 
-        Node *child=new Node(move,this);
+        Node *child=new Node(move,uct_constant,this);
         children.push_back(child);
         return child->play_random_game(board,other_player(player));
     }
@@ -192,8 +192,8 @@ Token Node::play_random_game(Board *board,Token player) {
     for (Nodes::iterator iter=children.begin(); iter!=children.end(); iter++) {
         Node *child=*iter;
 
-        if (not child->mode==LOOSER and (not best_child or best_score<child->value/child->nb+sqrtf(2.*logf(nb)/child->nb))) {
-             best_score=child->value/child->nb+sqrtf(2.*logf(nb)/child->nb);
+        if (not child->mode==LOOSER and (not best_child or best_score<child->value/child->nb+uct_constant*sqrtf(2.*logf(nb)/child->nb))) {
+             best_score=child->value/child->nb+uct_constant*sqrtf(2.*logf(nb)/child->nb);
              best_child=child;
         }
     }

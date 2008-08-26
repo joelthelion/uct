@@ -12,8 +12,8 @@ typedef std::list<const Node*> ConstNodes;
 
 class Node {
 public:
-    Node(); //root constructor
-    Node(const Move *move,Node *father=NULL);
+    Node(double uct_constant); //root constructor
+    Node(const Move *move,double uct_constant,Node *father=NULL);
     ~Node();
 
     void print() const;
@@ -41,6 +41,7 @@ protected:
 	void propagate_loosing_to_daddy();
     void recompute_inheritance();
     void tell_granpa_dad_is_a_looser(const Node *dad);
+	double uct_constant;
 
 private:
     Node *father;
