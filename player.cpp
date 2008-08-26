@@ -33,7 +33,7 @@ Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
 
 	clock_t start=clock(),end=clock();
 	int k;
-    for (k=0; k<max_iteration and root->get_mode()==NORMAL and end-start<max_sec*CLOCKS_PER_SEC; k++) {
+    for (k=0; (k<max_iteration or not max_iteration) and root->get_mode()==NORMAL and end-start<max_sec*CLOCKS_PER_SEC; k++) {
         Board *copy=board->deepcopy();
         Token winner=root->play_random_game(copy,player);
         delete copy;
