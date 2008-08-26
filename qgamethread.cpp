@@ -2,17 +2,22 @@
 
 #include <iostream>
 
-QGameThread::QGameThread(Player *player_a,Player *player_b,Board *board) : QThread(), player_a(player_a), player_b(player_b), board(board), abort(false), mutex() {}
+QGameThread::QGameThread(QMutex *mutex,Player *player_a,Player *player_b,Board *board) : QThread(), player_a(player_a), player_b(player_b), board(board), abort(false), mutex(mutex) {}
+
+void QGameThread::set_abort(bool new_abort) {
+    mutex->lock();
+    abort=new_abort;
+    mutex->unlock();
+}
 
 void QGameThread::run() {
 	Player *player_current=player_a;
-	Player *winner=NULL;
 	Move *last_move=NULL;
 
-	mutex.lock();
+	mutex->lock();
 	while (not abort) {
 		Board *copy=board->deepcopy();
-		mutex.unlock();
+		mutex->unlock();
 
 		//get the move
 		Move *move=player_current->get_move(copy,last_move);
@@ -21,9 +26,9 @@ void QGameThread::run() {
 		last_move=move;
 
 		//actually play the move
-		mutex.lock();
+		mutex->lock();
 		board->play_move(*move);
-		mutex.unlock();
+		mutex->unlock();
 		emit move_played();
 		copy->play_move(*move);
 
@@ -41,9 +46,9 @@ void QGameThread::run() {
 
 		delete copy;
 
-		mutex.lock();
+		mutex->lock();
 	}
-	mutex.unlock();
+	mutex->unlock();
     if (last_move) delete last_move;
 
 	if (winner) {
