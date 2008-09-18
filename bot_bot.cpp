@@ -13,8 +13,8 @@ int main(int argc, char *argv[]) {
     if (argc>1) game=parse_game(argv[1]);
     Board *board=choose_game(game);
 
-	Player *player_a=new PlayerBot(PLAYER_1,3,0,1.);
-	Player *player_b=new PlayerBot(PLAYER_2,3,0,0.5);
+	Player *player_a=new PlayerBot(PLAYER_1,1,0,1.);
+	Player *player_b=new PlayerBot(PLAYER_2,1,0,0.5);
 
 	play_game(player_a,player_b,board);
 
