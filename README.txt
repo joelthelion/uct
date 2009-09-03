@@ -34,6 +34,11 @@ SYNOPSIS
     for you, ie. chosing the best move :) Even better, it will demonstrably play the
     best move, given infinite time.
 
+BUILD INSTRUCTIONS
+    Make sure you have CMake and Qt installed. Then:
+    ccmake .
+    make
+
 IMPLEMENTATION
 
     This library is divided in two pieces: the generic UCT algorithm, in the files
