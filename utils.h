@@ -4,7 +4,7 @@
 #include "board.h"
 #include "player.h"
 
-typedef enum {BOARDC4,BOARDC5,OTHELLO} Game;
+typedef enum {BOARDC4,BOARDC5,OTHELLO,BLOCKS} Game;
 
 Game parse_game(const char *arg);
 Board *choose_game(Game game);
