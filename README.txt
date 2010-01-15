@@ -35,9 +35,9 @@ SYNOPSIS
     best move, given infinite time.
 
 BUILD INSTRUCTIONS
+
     Make sure you have CMake and Qt installed. Then:
-    ccmake .
-    make
+    ccmake . && make
 
 IMPLEMENTATION
 
@@ -46,3 +46,13 @@ IMPLEMENTATION
     a new game. The other files are either game descriptions or human interfaces
     (this version is shipped with sample implementations of connect 4 and othello, 
     with a QT Gui for the connect 4 game).
+
+    Adding a new game in a nutshell:
+    - copy boardc4.h and boardc4.cpp
+    - rename MoveC4 and BoardC4 to match the classes of your game in the header.
+    - write the implementation in the cpp file (this is the hardest step).
+    - add the cpp file in the CMakeLists.txt.
+    - add your game name in the Game enum in utils.h.
+    - add parsing code in parse_game in utils.cpp.
+    - ...
+    - profit

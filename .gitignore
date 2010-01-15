@@ -1,1 +1,13 @@
+Makefile
 build
+CMakeCache.txt
+CMakeFiles
+moc_*.cxx
+bot_bot
+bot_bot_gui
+human_bot
+*.a
+*.cmake
+test_board
+test_nested
+test_uct

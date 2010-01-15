@@ -4,12 +4,14 @@
 #include "boardc4.h"
 #include "boardc5.h"
 #include "boardothello.h"
+#include "boardblocks.h"
 
 Game parse_game(const char *arg) {
     std::string string(arg);
     if (string=="connect4") return BOARDC4;
     else if (string=="connect5") return BOARDC5;
     else if (string=="othello") return OTHELLO;
+    else if (string=="blocks") return BLOCKS;
     else return OTHELLO;
 }
 
@@ -25,10 +27,17 @@ Board *choose_game(Game game) {
 	case OTHELLO:
 		std::cout<<"othello"<<std::endl;
 		return new BoardOthello();
+    case BLOCKS:
+        std::cout<<"blocks"<<std::endl;
+        return new BoardBlocks(20,14,true);
 	}
 }
 
 Player *play_game(Player *player_a,Player *player_b,Board *board,int max_move) {
+    assert(board);
+    assert(player_a);
+    assert(player_b);
+
 	//FIXME check if there is a player one and a player two
 	Player *player_current=player_a;
 	Player *winner=NULL;
