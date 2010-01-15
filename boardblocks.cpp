@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <list>
+#include <iomanip>
 using std::cout;
 using std::endl;
 
@@ -170,10 +171,15 @@ void BoardBlocks::print() const {
 	for (Size column=0; column<width; column++) std::cout<<"-";
 	std::cout<<"+"<<std::endl;
 
+    float nplayer1 = 0;
+    float nplayer2 = 0;
 	for (Size row=0; row<height; row++) {
 		std::cout<<(row%10)<<"|";
 		for (Size column=0; column<width; column++) {
-            get_const_token(row,column).print_char();
+            const TokenBlocks &current = get_const_token(row,column);
+            current.print_char();
+            if (current.player==PLAYER_1) nplayer1++;
+            if (current.player==PLAYER_2) nplayer2++;
 		}
 		std::cout<<"|"<<(row%10)<<std::endl;
 	}
@@ -185,6 +191,10 @@ void BoardBlocks::print() const {
 	std::cout<<"  ";
 	for (Size column=0; column<width; column++) std::cout<<(column%10);
 	std::cout<<std::endl;
+
+    cout<<endl;
+    cout<<"p1 "<<std::fixed<<std::setprecision(0)<<100.*nplayer1/size<<"% ";
+    cout<<"p2 "<<std::fixed<<std::setprecision(0)<<100.*nplayer2/size<<"%"<<endl;
 }
 
 bool BoardBlocks::is_move_valid(const Move &abstract_move) const {
