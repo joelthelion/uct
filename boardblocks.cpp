@@ -5,7 +5,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <list>
-#include <iomanip>
 using std::cout;
 using std::endl;
 
