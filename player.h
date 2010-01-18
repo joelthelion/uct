@@ -26,6 +26,7 @@ public:
 
 	virtual Move *get_move(const Board *board,const Move * last_move) ;
 	virtual ~PlayerBot();
+    virtual void print() const;
 
 private:
 	double max_sec;

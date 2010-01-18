@@ -16,7 +16,10 @@ void Player::print() const {
 	std::cout<<name<<" "<<player;
 }
 
-
+void PlayerBot::print() const {
+    Player::print();
+	std::cout<<" max_sec="<<max_sec<<" max_iteration="<<max_iteration;
+}
 
 PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration,double uct_constant) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node(uct_constant)) {}
 
