@@ -18,10 +18,10 @@ void Player::print() const {
 
 void PlayerBot::print() const {
     Player::print();
-	std::cout<<" max_sec="<<max_sec<<" max_iteration="<<max_iteration;
+	std::cout<<" max_sec="<<max_sec<<" max_iteration="<<max_iteration<<" uct_constant="<<root->get_uct_constant();
 }
 
-PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration,double uct_constant) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node(uct_constant)) {}
+PlayerBot::PlayerBot(Token player,double max_sec,int max_iteration,Value uct_constant) : Player("bot",player), max_sec(max_sec),max_iteration(max_iteration),root(new Node(uct_constant)) {}
 
 Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
     //std::cout<<"playing enemy move"<<std::endl;
@@ -57,6 +57,8 @@ Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
 
 	//simulation report
 	std::cout<<"simulated "<<k<<" games ("<<saved_simulations<<" saved) in "<<float(end-start)/CLOCKS_PER_SEC<<"s"<<std::endl;
+
+    //root->print_tree(0,2);
 
 	//move report
     std::cout<<"playing ";

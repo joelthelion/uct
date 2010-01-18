@@ -13,8 +13,13 @@ int main(int argc, char *argv[]) {
     if (argc>1) game=parse_game(argv[1]);
     Board *board=choose_game(game);
 
-	Player *player_a=new PlayerBot(PLAYER_1,.1,0,0.1);
-	Player *player_b=new PlayerBot(PLAYER_2,3,0,0.1);
+    float p1time = 1.;
+    float p2time = 1.;
+    if (argc>2) p1time = parse_float(argv[2],p1time);
+    if (argc>3) p2time = parse_float(argv[3],p2time);
+
+	Player *player_a=new PlayerBot(PLAYER_1,p1time,0,0.2);
+	Player *player_b=new PlayerBot(PLAYER_2,p2time,0,0.2);
 
 	play_game(player_a,player_b,board);
 

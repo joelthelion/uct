@@ -146,7 +146,7 @@ void BoardOthello::print() const {
 	for (Size column=0; column<width; column++) std::cout<<column;
 	std::cout<<std::endl;
 
-	std::cout<<"1: "<<player_1_score<<" 2: "<<player_2_score<<" x: "<<cant_play_count<<" "<<played_count<<" "<<size<<std::endl;
+	std::cout<<"p1(x) "<<player_1_score<<" p2(o) "<<player_2_score<<std::endl; //<<" x: "<<cant_play_count<<" "<<played_count<<" "<<size<<std::endl;
 }
 
 bool BoardOthello::propagate(Token player, Size column, Size row, Size dcolumn, Size drow) const {

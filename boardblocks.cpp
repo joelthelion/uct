@@ -89,7 +89,7 @@ void BoardBlocks::TokenBlocks::print() const {
     cout<<"i="<<i<<" j="<<j<<" color="<<color<<" player="<<player;
 }
 
-BoardBlocks::BoardBlocks(Size width,Size height,bool init) : lastmove(PLAYER_2,NONE), width(width), height(height), size(width*height) {
+BoardBlocks::BoardBlocks(Size width,Size height,bool init) : lastmove(PLAYER_2,NONE), width(width), height(height), size(width*height), p1score(1), p2score(1) {
 	//allocate flat
 	flat=new TokenBlocks[size];
 
@@ -241,10 +241,8 @@ void BoardBlocks::print() const {
 	std::cout<<std::endl;
 
     cout<<endl;
-    //cout<<"p1 "<<std::fixed<<std::setprecision(0)<<100.*p1score/size<<"% ";
-    //cout<<"p2 "<<std::fixed<<std::setprecision(0)<<100.*p2score/size<<"%"<<endl;
-    cout<<"p1 "<<std::fixed<<std::setprecision(0)<<p1score<<" ";
-    cout<<"p2 "<<std::fixed<<std::setprecision(0)<<p2score<<endl;
+    cout<<"p1 "<<p1score<<" ";
+    cout<<"p2 "<<p2score<<endl;
 }
 
 bool BoardBlocks::is_move_valid(const Move &abstract_move) const {

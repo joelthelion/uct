@@ -12,12 +12,12 @@ typedef std::list<const Node*> ConstNodes;
 
 class Node {
 public:
-    Node(double uct_constant); //root constructor
-    Node(const Move *move,double uct_constant,Node *father=NULL);
+    Node(Value uct_constant); //root constructor
+    Node(const Move *move,Value uct_constant,Node *father=NULL);
     ~Node();
 
     void print() const;
-    void print_tree(int level=0) const;
+    void print_tree(int level=0,int maxlevel=-1) const;
     void print_best_branch_down() const;
     void print_branch_up() const;
 
@@ -25,6 +25,8 @@ public:
     Token play_random_game(Board *board,Token player);
 
 	Value get_winning_probability() const;
+    Value get_score() const;
+    Value get_uct_constant() const;
 	Mode get_mode() const;
 	const Move *get_move() const;
     Count get_nb() const;
@@ -41,7 +43,7 @@ protected:
 	void propagate_loosing_to_daddy();
     void recompute_inheritance();
     void tell_granpa_dad_is_a_looser(const Node *dad);
-	double uct_constant;
+	Value uct_constant;
 
 private:
     Node *father;
