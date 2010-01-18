@@ -5,17 +5,19 @@
 #include <queue>
 #include <set>
 
+enum Color {VIOLET,BLUE,ORANGE,GREEN,YELLOW,RED,NONE};
+
 class MoveBlocks : public Move {
 friend class BoardBlocks;
 public:
-	MoveBlocks(Token player,Size line,Size column);
+	MoveBlocks(Token player,Color color);
 
     virtual void print() const;
 	virtual Move *deepcopy() const;
 	virtual bool compare (const Move& move) const;
 
 private:
-    Size line,column;
+    Color color;
 };
 
 class BoardBlocks : public Board {
@@ -40,7 +42,6 @@ protected:
 private:
     struct TokenBlocks {
         void print() const;
-        enum Color {VIOLET,BLUE,ORANGE,GREEN,YELLOW,RED,NONE};
         Color color;
         Token player;
         bool playable;
@@ -60,13 +61,14 @@ private:
     const TokenBlocks& get_const_token(Size i, Size j) const;
     TokenBlocks& get_token(Size i,Size j);
 
-    Token lastplayer;
-    TokenBlocks::Color lastcolor;
+    MoveBlocks lastmove;
 
 	const Size width;
 	const Size height;
 	const Size size;
 	TokenBlocks *flat;
+    int p1score;
+    int p2score;
 };
 
 #endif
