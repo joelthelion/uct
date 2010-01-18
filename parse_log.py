@@ -47,11 +47,21 @@ def proba(p1time=None,p2time=None):
             print "can't find key %s" % repr(key)
     return bb,cc
 
-bb,cc = proba(p1time=1)
-figure()
+figure(1)
 title("p2 win probability")
-plot(aa,bb)
-figure()
+figure(2)
 title("realisation count")
-plot(aa,cc)
+
+for time in aa:
+    bb,cc = proba(p1time=time)
+    figure(1)
+    plot(aa,bb,label="p1time=%d" % time)
+    figure(2)
+    plot(aa,cc,label="p1time=%d" % time)
+
+figure(1)
+legend()
+figure(2)
+legend()
+
 show()
