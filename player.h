@@ -22,7 +22,7 @@ protected:
 
 class PlayerBot : public Player {
 public:
-	PlayerBot(Token player,double max_sec=1.5,int max_iteration=0,double uct_constant=1.);
+	PlayerBot(Token player,double max_sec=1.5,int max_iteration=0,Value uct_constant=1.);
 
 	virtual Move *get_move(const Board *board,const Move * last_move) ;
 	virtual ~PlayerBot();

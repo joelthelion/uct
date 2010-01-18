@@ -1,6 +1,7 @@
 #include "utils.h"
 
 #include <iostream>
+#include <sstream>
 #include "boardc4.h"
 #include "boardc5.h"
 #include "boardothello.h"
@@ -13,6 +14,16 @@ Game parse_game(const char *arg) {
     else if (string=="othello") return OTHELLO;
     else if (string=="blocks") return BLOCKS;
     else return OTHELLO;
+}
+
+float parse_float(const char *str,float defvalue) {
+    std::stringstream ss(str);
+    float v = 0;
+    ss >> v;
+    
+    if (ss.fail()) return defvalue;
+
+    return v;
 }
 
 Board *choose_game(Game game) {
@@ -37,6 +48,11 @@ Player *play_game(Player *player_a,Player *player_b,Board *board,int max_move) {
     assert(board);
     assert(player_a);
     assert(player_b);
+
+    player_a->print();
+    std::cout<<" VS ";
+    player_b->print();
+    std::cout<<std::endl;
 
 	//FIXME check if there is a player one and a player two
 	Player *player_current=player_a;

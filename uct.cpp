@@ -5,8 +5,8 @@
 #include <cassert>
 #include <cmath>
 
-Node::Node(double uct_constant) : move(new Move()), father(NULL), uct_constant(uct_constant), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
-Node::Node(const Move *move,double uct_constant,Node *father) :  move(move), father(father), uct_constant(uct_constant), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
+Node::Node(Value uct_constant) : move(new Move()), father(NULL), uct_constant(uct_constant), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
+Node::Node(const Move *move,Value uct_constant,Node *father) :  move(move), father(father), uct_constant(uct_constant), nb(0), value(0), simulation_value(0), mode(NORMAL) {}
 
 Node::~Node() {
     delete move;
@@ -34,22 +34,20 @@ Node * Node::advance_and_detach(const Move *move) {
         }
 	}
 	
+    Value old_uct_constant = uct_constant; //FUCK YOU BITCH
     delete this;
 	if (new_root) return new_root;
-    else return new Node(uct_constant);
+    else return new Node(old_uct_constant);
 }
 
 
 void Node::print() const {
-    std::cout<<"["<<children.size()<<" children";
-    std::cout<<","<<unexplored_moves.size()<<" unexplored";
+    std::cout<<"[";
+    if (not father) std::cout<<"ROOT,";
 
-    std::cout<<",";
+    std::cout<<children.size()<<" children,"<<unexplored_moves.size()<<" unexplored,";
+
     move->print();
-
-
-    if (not father) std::cout<<",ROOT";
-
     std::cout<<",";
     switch (mode) {
     case NORMAL:
@@ -63,21 +61,23 @@ void Node::print() const {
         break;
     }
 
-    std::cout<<",";
-    if (nb>0) std::cout<<value<<","<<nb<<","<<value/nb;
-    else std::cout<<nb;
+    std::cout<<",uct_constant="<<uct_constant<<",nb="<<nb;
+    if (nb>0 and father) std::cout<<",score="<<get_score();
+    if (nb>0) std::cout<<",value="<<value<<",prop="<<get_winning_probability();
 
     std::cout<<"]";
 }
 
-void Node::print_tree(int indent) const {
-    for (int k=0; k<indent*2; k++) std::cout<<"-";
+void Node::print_tree(int indent,int maxindent) const {
+    if (maxindent>=0 and indent>maxindent) return;
+
+    for (int k=0; k<indent; k++) std::cout<<"-";
     print();
     std::cout<<std::endl;
 
     for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
         const Node *child=*iter;
-        child->print_tree(indent+1);
+        child->print_tree(indent+1,maxindent);
     }
 }
 
@@ -90,6 +90,7 @@ void Node::print_branch_up() const {
 }
 
 Value Node::get_winning_probability() const {
+    assert(nb);
 	return value/nb;
 }
 
@@ -101,8 +102,17 @@ Count Node::get_nb() const {
     return nb;
 }
 
+Value Node::get_score() const {
+    assert(father);
+    return value/nb+uct_constant*sqrt(2*logf(father->nb)/nb);
+}
+
 const Move *Node::get_move() const {
 	return move;
+}
+
+Value Node::get_uct_constant() const {
+    return uct_constant;
 }
 
 const Node *Node::get_best_child() const {
@@ -149,16 +159,19 @@ Token Node::play_random_game(Board *board,Token player) {
     
     if (father) board->play_move(*move); //root as no move
 
-    if (father and board->check_for_win()!=NOT_PLAYED) { //FIXME two calls to check_for win
-        //std::cout<<"win situation detected"<<std::endl;
-        //move->print();
-        //std::cout<<std::endl;
+    if (father) {
+        Token winner=board->check_for_win();
+        if (winner!=NOT_PLAYED) {
+            //std::cout<<"win situation detected"<<std::endl;
+            //move->print();
+            //std::cout<<std::endl;
 
-		Token winner=board->check_for_win();
-		if (winner==move->player) propagate_winning_to_granpa();
-		else propagate_loosing_to_daddy();
+            //Token winner=board->check_for_win();
+            if (winner==move->player) propagate_winning_to_granpa();
+            else propagate_loosing_to_daddy();
 
-        return winner;
+            return winner;
+        }
     }
 
     if (not nb) {
@@ -192,8 +205,8 @@ Token Node::play_random_game(Board *board,Token player) {
     for (Nodes::iterator iter=children.begin(); iter!=children.end(); iter++) {
         Node *child=*iter;
 
-        if (not child->mode==LOOSER and (not best_child or best_score<child->value/child->nb+uct_constant*sqrtf(2.*logf(nb)/child->nb))) {
-             best_score=child->value/child->nb+uct_constant*sqrtf(2.*logf(nb)/child->nb);
+        if (not child->mode==LOOSER and (not best_child or best_score<child->get_score())) {
+             best_score=child->get_score();
              best_child=child;
         }
     }
