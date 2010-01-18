@@ -55,32 +55,34 @@ void BoardBlocks::TokenBlocks::print_char() const {
     //    return;
     //}
 
-    char c = ' ';
+    std::string c;
+    if (player==NOT_PLAYED) c = "█";
+    else c="■";
+
     switch (color) {
     case VIOLET:
-        c = 'v';
+        c = "\e[35m"+c+"\e[0m";
         break;
     case BLUE:
-        c = 'b';
+        c = "\e[34m"+c+"\e[0m";
         break;
     case ORANGE:
-        c = 'o';
+        c = "\e[36m"+c+"\e[0m"; //This is actually Cyan
         break;
     case GREEN:
-        c = 'g';
+        c = "\e[32m"+c+"\e[0m";
         break;
     case YELLOW:
-        c = 'y';
+        c = "\e[33m"+c+"\e[0m";
         break;
     case RED:
-        c = 'r';
+        c = "\e[31m"+c+"\e[0m";
         break;
     case NONE:
-        c = 'n';
+        c = 'N';
         break;
     }
 
-    if (player!=NOT_PLAYED) c = toupper(c);
     cout<<c;
 }
 
