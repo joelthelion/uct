@@ -23,7 +23,8 @@ ADD_EXECUTABLE(human_bot human_bot.cpp)
 TARGET_LINK_LIBRARIES(human_bot board)
 
 #gui
-FIND_PACKAGE(Qt4 REQUIRED)
+FIND_PACKAGE(Qt4)
+IF($QT_FOUND)
 INCLUDE(${QT_USE_FILE})
 
 SET(SRCS qboardc4.cpp qgamethread.cpp qgamewindow.cpp)
@@ -31,3 +32,4 @@ SET(HDRS qboardc4.h qgamethread.h qgamewindow.h)
 QT4_WRAP_CPP(MOC_SRCS ${HDRS})
 ADD_EXECUTABLE(bot_bot_gui bot_bot_gui.cpp ${MOC_SRCS} ${SRCS})
 TARGET_LINK_LIBRARIES(bot_bot_gui board ${QT_LIBRARIES})
+ENDIF($QT_FOUND)
