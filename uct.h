@@ -1,6 +1,7 @@
 #ifndef __UCT__
 #define __UCT__
 
+#include <cstdlib>
 #include <list>
 #include "common.h"
 #include "board.h"
