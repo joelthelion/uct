@@ -53,7 +53,7 @@ Move *BoardMatches::parse_move_string(Token player,const char *string) const {
 }
 
 void BoardMatches::print() const {
-	std::cout << matches_count << " matches" << std::endl;
+	std::cout << matches_count << " matches " << last_player << std::endl;
 	if (matches_count<=0) return;
 
 	for (int kk=0; kk<matches_count; kk++)

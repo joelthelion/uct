@@ -43,7 +43,7 @@ protected:
     void propagate_winning_to_granpa();
 	void propagate_loosing_to_daddy();
     void recompute_inheritance();
-    void tell_granpa_dad_is_a_looser(const Node *dad);
+    void tell_granpa_dad_is_a_looser();
 	Value uct_constant;
 
 private:
