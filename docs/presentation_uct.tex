@@ -113,17 +113,17 @@
 
 \begin{columns}
 \begin{column}{.45\linewidth}
-\begin{block}{Tree search algorithm}
+\begin{alertblock}{Tree search algorithm}
 \begin{itemize}
 \item Brute force approach
 \item Exhaustiv search of every game possible
 \item High complexity
 \item Works only for small game (tic-tac-toe)
 \end{itemize}
-\end{block} 
+\end{alertblock} 
 \end{column}
 \begin{column}{.5\linewidth}
-\begin{block}{MinMax}
+\begin{alertblock}{MinMax}
 \begin{itemize}
 \item Standard AI for chess
 \item Tree search with limited depth
@@ -131,12 +131,12 @@
 \item Constant time consumption
 \item Doesn't work for open game like Go
 \end{itemize}
-\end{block}
+\end{alertblock}
 \end{column}
 \end{columns}
 
 
-\begin{block}{UCT}
+\begin{exampleblock}{UCT}
 \begin{itemize}
 \item Collaboration between INRIA and Taïwan university [LEE2009]
 \item Used in MOGO, first Go AI to beat professionnal player in 2008
@@ -144,7 +144,7 @@
 \item \alert<2>{No need for score function}, only game completion
 \item \alert<2>{Flexible time consumption and high scalability}
 \end{itemize}
-\end{block}
+\end{exampleblock}
 \end{frame}
 
 \section{Method}
@@ -201,6 +201,26 @@ Each state has two variables:
 \end{columns}
 \end{frame}
 
+\begin{frame}
+\frametitle{Simulated games selection}
+\begin{itemize}
+ \item \alert{Exploration}
+ \\ Each move has the same probability of being selected.
+ \\ This ensures that every stategies are considered.
+ \item \alert{Exploitation}
+ \\ The probability of selecting a move is proportionnal to the winning probability.
+ \\ This ensures that the computation power is spent on the strategy that is more likely to win.
+ \\ Note that when n is small the winning probability is estimated with a large relative error.
+\end{itemize}
+\onslide<2>{
+\begin{exampleblock}{Tradeoff}
+\begin{itemize}
+ \item For small values of n, use the exploration strategy.
+ \item For large values of n, use the exploitation strategy.
+\end{itemize}
+\end{exampleblock}
+}
+\end{frame}
 
 \section{Results}
 
@@ -271,10 +291,10 @@ UCT finished 50th over more than 3000 contestants.
 \item Post doc au Centre Léon Bérard (Lyon) \\ Simulation Monte-Carlo Protonthérapie (GATE) \\ Imagerie $\gamma$-prompt
 \end{itemize}
 \end{block}
-\begin{block}{Numerous computer side project}
+\begin{block}{Numerous computer science side project}
 \begin{itemize}
 \item Freesiege, Blocks, ...
-\item UCT
+\item Monte-Carlo, UCT, ...
 \item Autojump, cluster submission tools
 \end{itemize}
 \end{block}
