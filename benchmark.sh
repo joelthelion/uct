@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
-log=log_blocks.txt
+set -u
+set -e
+
+test -x ./bot_bot || exit 1
+
+game=othello
+log=log_${game}.txt
 
 rm -f $log
-for p1time in $(seq .1 .1 1); do
-for p2time in $(seq .1 .1 1); do
+for p1time in $(LANG="C" seq .1 .2 .9); do
+for p2time in $(LANG="C" seq .1 .2 .9); do
 	echo "p1time=$p1time p2time=$p2time" | tee -a $log
 	for n in $(seq 1 50); do
-		./bot_bot blocks $p1time $p2time $k >> $log
+		./bot_bot $game $p1time $p2time >> $log
 		echo -n "-"
 	done
 	echo
