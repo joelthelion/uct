@@ -116,7 +116,7 @@
 \begin{alertblock}{Tree search algorithm}
 \begin{itemize}
 \item Brute force approach
-\item Exhaustiv search of every game possible
+\item Exhaustive search of every game possible
 \item High complexity
 \item Works only for small game (tic-tac-toe)
 \end{itemize}
@@ -138,8 +138,8 @@
 
 \begin{exampleblock}{UCT}
 \begin{itemize}
-\item Collaboration between INRIA and Taïwan university [LEE2009]
-\item Used in MOGO, first Go AI to beat professionnal player in 2008
+\item Collaboration between INRIA and Taiwan university [LEE2009]
+\item Used in MOGO, first Go AI to beat professional player in 2008
 \item Monte Carlo / Tree search hybrid
 \item \alert<2>{No need for score function}, only game completion
 \item \alert<2>{Flexible time consumption and high scalability}
@@ -206,14 +206,14 @@ Each state has two variables:
 \begin{itemize}
  \item \alert{Exploration}
  \\ Each move has the same probability of being selected.
- \\ This ensures that every stategies are considered.
+ \\ This ensures that every strategies are considered.
  \item \alert{Exploitation}
- \\ The probability of selecting a move is proportionnal to the winning probability.
+ \\ The probability of selecting a move is proportional to the winning probability.
  \\ This ensures that the computation power is spent on the strategy that is more likely to win.
  \\ Note that when n is small the winning probability is estimated with a large relative error.
 \end{itemize}
 \onslide<2>{
-\begin{exampleblock}{Tradeoff}
+\begin{exampleblock}{Trade-off}
 \begin{itemize}
  \item For small values of n, use the exploration strategy.
  \item For large values of n, use the exploitation strategy.
@@ -243,7 +243,7 @@ Each state has two variables:
 \includegraphics[width=\linewidth]{board_virtual}
 \end{center}
 \begin{itemize}
-\item Derivate abstract board class
+\item Derive abstract board class
 \item Implement a few virtual methods
 \item That's it! \\ UCT handles the hard part of choosing the best move for you.
 \end{itemize}
@@ -269,7 +269,7 @@ UCT finished 50th over more than 3000 contestants.
 
 \begin{frame}
 \begin{center}
-\Huge Demonstation \\ Can you beat the IA?
+\Huge Demonstration \\ Can you beat the AI?
 \end{center}
 \end{frame}
 
