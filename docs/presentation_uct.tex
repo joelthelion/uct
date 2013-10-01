@@ -1,0 +1,264 @@
+\documentclass{beamer}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{setspace}
+\usepackage{sidecap}
+\usepackage{times}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{bigstrut}
+\usepackage{color}
+\usepackage[normalem]{ulem}
+\usepackage{ifthen}
+\usepackage{cancel}
+\input{rgb.tex}
+
+\newcommand{\gclass}[1]{\textcolor{compl}{\textrm{#1}}}
+
+
+\useinnertheme{rounded}
+\usecolortheme{orchid}
+\useinnertheme{circles}
+
+\setbeamercolor{titlelike}{fg=darkred,bg=white}
+\setbeamercolor{itemize item}{fg=darkred}
+\setbeamercolor{subitem}{fg=darkred}
+\setbeamercolor{item projected}{bg=darkred}
+
+\mode<presentation>
+
+\setbeamercolor{frametitle}{bg=gray!15!white}
+\setbeamercolor*{author in head/foot}{parent=palette tertiary}
+\setbeamercolor*{title in head/foot}{parent=palette secondary}
+\setbeamercolor*{date in head/foot}{parent=palette quaternary,fg=black}
+
+\setbeamercolor*{section in head/foot}{parent=frametitle,fg=black}
+\setbeamercolor*{subsection in head/foot}{parent=palette primary}
+
+\setbeamertemplate{navigation symbols}
+{
+}
+
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+%   \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+%     \usebeamerfont{author in head/foot}\insertshortauthor~~(\insertshortinstitute)
+%   \end{beamercolorbox}%
+%   \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+%     \usebeamerfont{title in head/foot}\insertshorttitle
+%   \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}
+    \bf
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\setbeamertemplate{headline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,left]{section in head/foot}%
+    \usebeamerfont{section in head/foot}
+    \bf
+    \hspace*{2ex}\insertsectionhead\hspace*{2ex}\insertsubsectionhead
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+% \AtBeginSection[]{
+%  \frame<handout:0>{
+%    \frametitle{Plan}
+%    \tableofcontents[current]
+%  }
+% }
+
+\mode<all>
+
+
+\title{Artificial Intelligence for deterministic 2 players games with UCT}
+\author{Pierre Gueth}
+\institute{}
+\date{\today}
+
+\DeclareMathOperator{\corr}{corr}
+
+\begin{document}
+
+\maketitle
+
+% \begin{frame}
+% \frametitle{Simulation}
+% \begin{itemize}
+%  \item
+% \end{itemize}
+% \end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Motivation}
+\begin{block}{}
+\begin{itemize}
+\item Artificial intelligence 
+\item PG camera
+\item Discrepancies between planned and actual configurations
+\end{itemize}
+\end{block}
+\begin{block}{Aims}
+\begin{itemize}
+\item \alert{Prediction of perturbation amplitude}
+\item Study of correlation between PG profiles and perturbation components
+\begin{itemize}
+\item Distal falloff position
+\item Maximum correlation between profiles
+\end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Context}
+% \begin{block}{Protontherapy}
+% \begin{itemize}
+% \item Physics validated experimentally for dose deposition
+% \item Proton experimental PG data
+% \item Internal Monte Carlo models need tuning for heavy projectiles
+% \end{itemize}
+% \end{block}
+\begin{block}{Granularity}
+\begin{itemize}
+\item Whole treatment fraction ($\sim10^{10}$ protons for $2~\mathrm{Gy}$)
+\item Energy layer (constant energy, $\sim10^{9}$ protons for $2~\mathrm{Gy}$)
+\item \alert<2->{Spot by spot monitoring} ($\sim10^7$ protons for $2~\mathrm{Gy}$)
+\end{itemize}
+\end{block}
+\begin{block}{Monitoring device}
+\begin{itemize}
+%\item PET ring (offline, limited by annihilation)
+\item Vertex imaging (inline, only for heavy projectiles)
+\item \alert<3->{Prompt gamma camera} (inline, proton and heavy projectiles)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{PG monitoring technology}
+\begin{block}{Compton camera}
+\begin{itemize}
+ \item Compton interaction in scatter detector
+ \item Emission position from line-cone intersection
+\end{itemize}
+\end{block}
+\begin{block}{Knife edge}
+\begin{itemize}
+ \item Count hits of PG passing through a knife edge slit
+ \item Easy geometrical reconstruction
+ %\item Low counting rate
+\end{itemize}
+\end{block}
+\begin{block}{\alert<2>{Multiple slits}}
+\begin{itemize}
+ \item Count hits of PG passing through slits
+ \item Straightforward reconstruction
+ %\item Higher counting rate than pinhole
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Method}
+
+\begin{frame}
+\frametitle{Types of perturbation}
+\begin{itemize}
+ \item \alert<2>{Patient position}
+ \item Patient orientation
+ \item Stoichiometric calibration of TPS
+ \item Tumor regression / anatomical change
+ \item Internal organ motion
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Classifier training}
+\begin{itemize}
+ \item Find measure threshold by maximizing associated specificity and sensitivity (MASS)
+\end{itemize}
+\vspace*{.5cm}
+$$\operatorname{specificity} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FP}}$$
+$$\operatorname{sensitivity} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}$$
+$$\operatorname{MASS} = \max_{MT} \sqrt{\operatorname{specificity}^2 + \operatorname{sensitivity}^2}$$
+\begin{itemize}
+ \item Upper-left most point in ROC curves
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Classifier training}
+\begin{center}
+\end{center}
+\end{frame}
+
+\section{Results}
+
+\begin{frame}
+\begin{center}
+\frametitle{C++ implementation}
+\includegraphics[width=\linewidth]{board_virtual}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\frametitle{Google AI Challenge 2010: Tron}
+\includegraphics[width=\linewidth]{tron}
+finished 50th over more than 3000 contestans.
+\end{center}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+\begin{center}
+\Huge Demonstation \\ Can you beat the IA?
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Huge Thanks for your attention
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pierre Gueth}
+\begin{block}{Wide technical and academical knowledge}
+\begin{itemize}
+\item Classe préparatoire PT
+\item ENS Cachan \\ aggrégation physique appliquée / EEA
+\item Thèse au laboratoire CREATIS (Université Lyon I) \\ Imagerie médicale ultrasonore \\ Estimation de mouvement
+\item Post doc au Centre Léon Bérard (Lyon) \\ Simulation Monte-Carlo Protonthérapie (GATE) \\ Imagerie $\gamma$-prompt
+\end{itemize}
+\end{block}
+\begin{block}{Numerous computer side project}
+\begin{itemize}
+\item Freesiege, Blocks, ...
+\item UCT
+\item Autojump, cluster submission tools
+\end{itemize}
+\end{block}
+\end{frame}
+
+\end{document}
