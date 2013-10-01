@@ -109,71 +109,40 @@
 \section{Introduction}
 
 \begin{frame}
-\frametitle{Motivation}
-\begin{block}{}
-\begin{itemize}
-\item Artificial intelligence 
-\item PG camera
-\item Discrepancies between planned and actual configurations
-\end{itemize}
-\end{block}
-\begin{block}{Aims}
-\begin{itemize}
-\item \alert{Prediction of perturbation amplitude}
-\item Study of correlation between PG profiles and perturbation components
-\begin{itemize}
-\item Distal falloff position
-\item Maximum correlation between profiles
-\end{itemize}
-\end{itemize}
-\end{block}
-\end{frame}
+\frametitle{UCT and other AI}
 
-\begin{frame}
-\frametitle{Context}
-% \begin{block}{Protontherapy}
-% \begin{itemize}
-% \item Physics validated experimentally for dose deposition
-% \item Proton experimental PG data
-% \item Internal Monte Carlo models need tuning for heavy projectiles
-% \end{itemize}
-% \end{block}
-\begin{block}{Granularity}
+\begin{columns}
+\begin{column}{.45\linewidth}
+\begin{block}{Tree search algorithm}
 \begin{itemize}
-\item Whole treatment fraction ($\sim10^{10}$ protons for $2~\mathrm{Gy}$)
-\item Energy layer (constant energy, $\sim10^{9}$ protons for $2~\mathrm{Gy}$)
-\item \alert<2->{Spot by spot monitoring} ($\sim10^7$ protons for $2~\mathrm{Gy}$)
+\item Brute force approach
+\item Exhaustiv search of every game possible
+\item High complexity
+\item Works only for small game (tic-tac-toe)
+\end{itemize}
+\end{block} 
+\end{column}
+\begin{column}{.5\linewidth}
+\begin{block}{MinMax}
+\begin{itemize}
+\item Standard AI for chess
+\item Tree search with limited depth
+\item Need score function
+\item Constant time consumption
+\item Doesn't work for open game like Go
 \end{itemize}
 \end{block}
-\begin{block}{Monitoring device}
-\begin{itemize}
-%\item PET ring (offline, limited by annihilation)
-\item Vertex imaging (inline, only for heavy projectiles)
-\item \alert<3->{Prompt gamma camera} (inline, proton and heavy projectiles)
-\end{itemize}
-\end{block}
-\end{frame}
+\end{column}
+\end{columns}
 
-\begin{frame}
-\frametitle{PG monitoring technology}
-\begin{block}{Compton camera}
+
+\begin{block}{UCT}
 \begin{itemize}
- \item Compton interaction in scatter detector
- \item Emission position from line-cone intersection
-\end{itemize}
-\end{block}
-\begin{block}{Knife edge}
-\begin{itemize}
- \item Count hits of PG passing through a knife edge slit
- \item Easy geometrical reconstruction
- %\item Low counting rate
-\end{itemize}
-\end{block}
-\begin{block}{\alert<2>{Multiple slits}}
-\begin{itemize}
- \item Count hits of PG passing through slits
- \item Straightforward reconstruction
- %\item Higher counting rate than pinhole
+\item Collaboration between INRIA and Taïwan university [LEE2009]
+\item Used in MOGO, first Go AI to beat professionnal player in 2008
+\item Monte Carlo / Tree search hybrid
+\item \alert<2>{No need for score function}, only game completion
+\item \alert<2>{Flexible time consumption and high scalability}
 \end{itemize}
 \end{block}
 \end{frame}
@@ -181,51 +150,99 @@
 \section{Method}
 
 \begin{frame}
-\frametitle{Types of perturbation}
+\frametitle{Which game can UCT play?}
+\begin{columns}
+\begin{column}{.55\linewidth}
 \begin{itemize}
- \item \alert<2>{Patient position}
- \item Patient orientation
- \item Stoichiometric calibration of TPS
- \item Tumor regression / anatomical change
- \item Internal organ motion
+ \item Two players alternating
+ \item Deterministic game states
+ \item No cyclic game states
+ \item Each game should end by a win of either player or a draw
 \end{itemize}
+\end{column}
+\begin{column}{.45\linewidth}
+\includegraphics<1>[width=\linewidth]{anim_empty}
+\includegraphics<2>[width=\linewidth]{anim_game_03}
+\includegraphics<3>[width=\linewidth]{anim_game_02}
+\includegraphics<4>[width=\linewidth]{anim_game_01}
+\includegraphics<5>[width=\linewidth]{anim_game_00}
+\includegraphics<6>[width=\linewidth]{anim_all}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
-\frametitle{Classifier training}
+\frametitle{UCT principle}
+\begin{columns}
+\begin{column}{.55\linewidth}
+\begin{block}{}
+\begin{enumerate}
+ \item Play random moves for both players until game reaches its end
+ \item Update upstream game state value
+ \item Select initials moves and go back to step 1
+\end{enumerate}
+\end{block}
+Each state has two variables:
 \begin{itemize}
- \item Find measure threshold by maximizing associated specificity and sensitivity (MASS)
+ \item n = number of played games that pass by this state
+ \item v = number of won games that pass by this state
 \end{itemize}
-\vspace*{.5cm}
-$$\operatorname{specificity} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FP}}$$
-$$\operatorname{sensitivity} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}$$
-$$\operatorname{MASS} = \max_{MT} \sqrt{\operatorname{specificity}^2 + \operatorname{sensitivity}^2}$$
-\begin{itemize}
- \item Upper-left most point in ROC curves
-\end{itemize}
+\alert{The probability of winning} by reaching each state is estimated by \alert{v/n}
+\end{column}
+\begin{column}{.45\linewidth}
+\includegraphics<1>[width=\linewidth]{anim_uct_03}
+\includegraphics<2>[width=\linewidth]{anim_uct_02}
+\includegraphics<3>[width=\linewidth]{anim_uct_01}
+\includegraphics<4>[width=\linewidth]{anim_uct_00}
+\includegraphics<5>[width=\linewidth]{anim_uct_04}
+\includegraphics<6>[width=\linewidth]{anim_uct_05}
+\includegraphics<7>[width=\linewidth]{anim_uct_06}
+\end{column}
+\end{columns}
 \end{frame}
 
-\begin{frame}
-\frametitle{Classifier training}
-\begin{center}
-\end{center}
-\end{frame}
 
 \section{Results}
 
 \begin{frame}
-\begin{center}
 \frametitle{C++ implementation}
-\includegraphics[width=\linewidth]{board_virtual}
+
+\begin{itemize}
+\item I implemented UCT in C++
+\item Use Qt, CMake but mainly based on standard library
+\item $\sim3000$ C++ lines
+\end{itemize}
+\begin{center}
+\Huge \alert{https://github.com/elcerdo/uct}
 \end{center}
 \end{frame}
 
 \begin{frame}
+\frametitle{Easy implementation of new games}
 \begin{center}
-\frametitle{Google AI Challenge 2010: Tron}
-\includegraphics[width=\linewidth]{tron}
-finished 50th over more than 3000 contestans.
+\includegraphics[width=\linewidth]{board_virtual}
 \end{center}
+\begin{itemize}
+\item Derivate abstract board class
+\item Implement a few virtual methods
+\item That's it! \\ UCT handles the hard part of choosing the best move for you.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{AI strength vs. computation time: Othello}
+\begin{center}
+\includegraphics[width=.6\linewidth]{perf_othello}
+\end{center}
+AI win probability increase linearly with computation time for computation time below 1s.
+\end{frame}
+
+\begin{frame}
+\frametitle{Google AI Challenge 2010: Tron}
+\begin{center}
+\includegraphics[width=.7\linewidth]{tron} \\
+\end{center}
+UCT finished 50th over more than 3000 contestants.
 \end{frame}
 
 \section{Conclusion}
@@ -241,6 +258,8 @@ finished 50th over more than 3000 contestans.
 \Huge Thanks for your attention
 \end{center}
 \end{frame}
+
+\section{Personal information}
 
 \begin{frame}
 \frametitle{Pierre Gueth}
