@@ -6,6 +6,7 @@
 #include "boardc5.h"
 #include "boardothello.h"
 #include "boardblocks.h"
+#include "boardmatches.h"
 
 Game parse_game(const char *arg) {
     std::string string(arg);
@@ -13,6 +14,7 @@ Game parse_game(const char *arg) {
     else if (string=="connect5") return BOARDC5;
     else if (string=="othello") return OTHELLO;
     else if (string=="blocks") return BLOCKS;
+    else if (string=="matches") return MATCHES;
     else return OTHELLO;
 }
 
@@ -41,6 +43,9 @@ Board *choose_game(Game game) {
     case BLOCKS:
         std::cout<<"blocks"<<std::endl;
         return new BoardBlocks(20,14,true);
+    case MATCHES:
+        std::cout<<"matches"<<std::endl;
+        return new BoardMatches();
 	}
 }
 

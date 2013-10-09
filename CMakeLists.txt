@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.4)
 #libraries
 ADD_LIBRARY(board
 uct.cpp player.cpp utils.cpp
-boardc4.cpp boardc5.cpp boardblocks.cpp boardothello.cpp board.cpp)
+boardc4.cpp boardc5.cpp boardblocks.cpp boardothello.cpp boardmatches.cpp board.cpp)
 
 #tests
 ADD_EXECUTABLE(test_nested test_nested.cpp)
@@ -24,12 +24,11 @@ TARGET_LINK_LIBRARIES(human_bot board)
 
 #gui
 FIND_PACKAGE(Qt4)
-IF($QT_FOUND)
-INCLUDE(${QT_USE_FILE})
-
-SET(SRCS qboardc4.cpp qgamethread.cpp qgamewindow.cpp)
-SET(HDRS qboardc4.h qgamethread.h qgamewindow.h)
-QT4_WRAP_CPP(MOC_SRCS ${HDRS})
-ADD_EXECUTABLE(bot_bot_gui bot_bot_gui.cpp ${MOC_SRCS} ${SRCS})
-TARGET_LINK_LIBRARIES(bot_bot_gui board ${QT_LIBRARIES})
-ENDIF($QT_FOUND)
+IF(QT_FOUND)
+    INCLUDE(${QT_USE_FILE})
+    SET(SRCS qboardc4.cpp qgamethread.cpp qgamewindow.cpp)
+    SET(HDRS qboardc4.h qgamethread.h qgamewindow.h)
+    QT4_WRAP_CPP(MOC_SRCS ${HDRS})
+    ADD_EXECUTABLE(bot_bot_gui bot_bot_gui.cpp ${MOC_SRCS} ${SRCS})
+    TARGET_LINK_LIBRARIES(bot_bot_gui board ${QT_LIBRARIES})
+ENDIF(QT_FOUND)

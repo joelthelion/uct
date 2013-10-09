@@ -268,7 +268,7 @@ void Node::propagate_winning_to_granpa() {
     if (father) {
         father->mode=LOOSER;
         if (father->father) {
-            father->father->tell_granpa_dad_is_a_looser(father);
+            father->father->tell_granpa_dad_is_a_looser();
         }
     }
 }
@@ -277,9 +277,10 @@ void Node::propagate_loosing_to_daddy() {
     mode=LOOSER;
     
     if (father) {
-		father->tell_granpa_dad_is_a_looser(this);
+		father->tell_granpa_dad_is_a_looser();
     }
 }
+
 void Node::recompute_inheritance() {
     nb=1;
     value=simulation_value;
@@ -295,7 +296,9 @@ void Node::recompute_inheritance() {
     if (father) father->recompute_inheritance();
 }
 
-void Node::tell_granpa_dad_is_a_looser(const Node *dad) {
+void Node::tell_granpa_dad_is_a_looser() {
+	if (not unexplored_moves.empty()) return;
+
     Count new_nb=1;
     Value new_value=simulation_value;
     for (Nodes::const_iterator iter=children.begin(); iter!=children.end(); iter++) {
@@ -307,7 +310,7 @@ void Node::tell_granpa_dad_is_a_looser(const Node *dad) {
         }
     }
 
-    if (new_nb==1) { //all child are loosers
+    if (new_nb==1) { //all explored child are loosers
         propagate_winning_to_granpa();
     } else {
         nb=new_nb;
