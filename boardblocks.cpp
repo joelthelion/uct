@@ -58,6 +58,7 @@ void BoardBlocks::TokenBlocks::print_char() const {
     std::string c;
     if (player==NOT_PLAYED) c = "█";
     else c="■";
+
     switch (color) {
     case VIOLET:
         c = "\e[35m"+c+"\e[0m";
@@ -78,9 +79,10 @@ void BoardBlocks::TokenBlocks::print_char() const {
         c = "\e[31m"+c+"\e[0m";
         break;
     case NONE:
-        c = 'n';
+        c = 'N';
         break;
     }
+
     cout<<c;
 }
 
@@ -106,7 +108,7 @@ BoardBlocks::BoardBlocks(Size width,Size height,bool init) : lastmove(PLAYER_2,N
             current.player   = NOT_PLAYED;
             current.color    = color;
         }
-        color = static_cast<Color>((color+1)%6); //FIXME hardcoded color number
+        color = static_cast<Color>(5-color); //FIXME hardcoded color number
         {
             TokenBlocks &current = get_token(height-1-row,width-1-column);
             current.i        = height-1-row;

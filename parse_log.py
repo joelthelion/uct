@@ -29,7 +29,7 @@ fh.close()
 for key,value in results.items():
     print key, float(sum(value))/len(value), len(value)
 
-aa = ss.arange(1,10,dtype=ss.integer)
+aa = ss.arange(1,10,2,dtype=ss.integer)
 
 def proba(p1time=None,p2time=None):
     bb = ss.zeros(aa.shape)
@@ -47,11 +47,23 @@ def proba(p1time=None,p2time=None):
             print "can't find key %s" % repr(key)
     return bb,cc
 
-bb,cc = proba(p1time=1)
-figure()
-title("p2 win probability")
-plot(aa,bb)
-figure()
-title("realisation count")
-plot(aa,cc)
+figure(1)
+ylabel("p2 win probability [%]")
+xlabel("p2 time [ms]")
+figure(2)
+ylabel("realisation count")
+xlabel("p2 time [ms]")
+
+for time in aa:
+    bb,cc = proba(p1time=time)
+    figure(1)
+    plot(aa*100,bb,label="p1 time %dms" % (100*time))
+    figure(2)
+    plot(aa*100,cc,label="p1 time %dms" % (100*time))
+
+figure(1)
+legend()
+figure(2)
+legend()
+
 show()

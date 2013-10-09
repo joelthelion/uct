@@ -9,6 +9,7 @@ enum Color {VIOLET,BLUE,ORANGE,GREEN,YELLOW,RED,NONE};
 
 class MoveBlocks : public Move {
 friend class BoardBlocks;
+friend class Pixel;
 public:
 	MoveBlocks(Token player,Color color);
 
@@ -16,7 +17,7 @@ public:
 	virtual Move *deepcopy() const;
 	virtual bool compare (const Move& move) const;
 
-private:
+protected:
     Color color;
 };
 
@@ -36,10 +37,6 @@ public:
 	virtual bool play_random_move(Token player);
 	virtual Token check_for_win() const;
 
-protected:
-    void update_playable();
-
-private:
     struct TokenBlocks {
         void print() const;
         Color color;
@@ -49,6 +46,13 @@ private:
         Size i,j;
     };
 
+    const TokenBlocks& get_const_token(Size i, Size j) const;
+    int get_p1score() const;
+    int get_p2score() const;
+protected:
+    void update_playable();
+
+private:
     typedef std::pair<int,BoardBlocks::TokenBlocks*> Seed;
 
     struct SeedGreater {
@@ -58,7 +62,6 @@ private:
     typedef std::priority_queue<Seed,std::vector<Seed>,SeedGreater> SeedsQueue;
     typedef std::set<TokenBlocks*> TokenBlocksSet;
 
-    const TokenBlocks& get_const_token(Size i, Size j) const;
     TokenBlocks& get_token(Size i,Size j);
 
     MoveBlocks lastmove;
