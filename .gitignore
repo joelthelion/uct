@@ -8,6 +8,7 @@ bot_bot_gui
 human_bot
 *.a
 *.cmake
+*.swp
 test_board
 test_nested
 test_uct
