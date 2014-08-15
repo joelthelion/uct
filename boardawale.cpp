@@ -38,7 +38,7 @@ MoveAwale::compare(const Move& abstract_move) const
 
 
 BoardAwale::BoardAwale()
-		: player1_score(0), player2_score(0)
+		: player1_score(0), player2_score(0), round_counter(0)
 {
 		for (int kk=0; kk<6; kk++)
 		{
@@ -62,6 +62,7 @@ BoardAwale::deepcopy() const
 				copy->player1_slots[kk] = player1_slots[kk];
 				copy->player2_slots[kk] = player2_slots[kk];
 		}
+		copy->round_counter = round_counter;
 		return copy;
 }
 
@@ -154,6 +155,9 @@ BoardAwale::get_possible_moves(Token player) const
 {
 		Moves moves;
 
+		if (round_counter>128)
+				return moves;
+
 		for (int kk=0; kk<6; kk++)
 		{
 				MoveAwale* move = new MoveAwale(player, kk);
@@ -215,11 +219,14 @@ BoardAwale::play_move(const Move &abstract_move)
 		if (move.player==PLAYER_2) score = &player2_score;
 
 		// collect seeds
-		while (position>0 and (slots[position]==2 or slots[position]==3))
+		while (position>=0 and (slots[position]==2 or slots[position]==3))
 		{
 				*score += slots[position];
 				slots[position] = 0;
+				position--;
 		}
+
+		round_counter++;
 }
 
 bool
@@ -244,6 +251,15 @@ BoardAwale::play_random_move(Token player)
 Token
 BoardAwale::check_for_win() const
 {
+		if (player1_score>24) return PLAYER_1;
+		if (player2_score>24) return PLAYER_2;
+
+		if (48-player1_score-player2_score<6)
+		{
+				if (player1_score>player2_score) return PLAYER_1;
+				if (player1_score<player2_score) return PLAYER_2;
+		}
+
 		return NOT_PLAYED;
 }
 

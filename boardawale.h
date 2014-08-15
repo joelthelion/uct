@@ -37,6 +37,7 @@ class BoardAwale : public Board {
 				int player2_slots[6];
 				int player1_score;
 				int player2_score;
+				int round_counter;
 };
 
 #endif
