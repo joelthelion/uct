@@ -89,7 +89,7 @@ BoardAwale::format_slot(int count)
 {
 		if (count==0) return ' ';
 		if (count<10) return '0'+count;
-		if (count<16) return 'a'+count;
+		if (count<33) return 'a'+count-10;
 		return '?';
 }
 
@@ -191,6 +191,7 @@ BoardAwale::play_move(const Move &abstract_move)
 
 		while (count>0)
 		{
+				// advance position
 				position++;
 				while (position>5)
 				{
@@ -199,6 +200,11 @@ BoardAwale::play_move(const Move &abstract_move)
 						position -= 6;
 				}
 
+				// skip start position
+				if (position==move.position and player==move.player)
+						continue;
+
+				// distribute seed
 				slots[position]++;
 				count--;
 		}
@@ -208,6 +214,7 @@ BoardAwale::play_move(const Move &abstract_move)
 		int* score = &player1_score;
 		if (move.player==PLAYER_2) score = &player2_score;
 
+		// collect seeds
 		while (position>0 and (slots[position]==2 or slots[position]==3))
 		{
 				*score += slots[position];
