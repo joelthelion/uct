@@ -4,7 +4,7 @@
 #include "board.h"
 #include "player.h"
 
-typedef enum {BOARDC4,BOARDC5,OTHELLO,BLOCKS,MATCHES} Game;
+typedef enum {BOARDC4,BOARDC5,OTHELLO,BLOCKS,MATCHES,AWALE} Game;
 
 Game parse_game(const char *arg);
 float parse_float(const char *str,float defvalue);
