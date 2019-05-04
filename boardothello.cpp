@@ -23,14 +23,14 @@ void MoveOthello::print() const {
 }
 
 Move *MoveOthello::deepcopy() const {
-	Move *copy=NULL;
+	Move *copy= nullptr;
 	if (can_play) copy=new MoveOthello(player,column,row); //normal move
 	else copy=new MoveOthello(player); // "cant play" move
 	return copy;
 }
 
 bool MoveOthello::compare(const Move& abstract_move) const {
-    const MoveOthello &move=dynamic_cast<const MoveOthello&>(abstract_move);
+    const auto &move=dynamic_cast<const MoveOthello&>(abstract_move);
 	return Move::compare(abstract_move) and column==move.column and row==move.row and can_play==move.can_play;
 }
 
@@ -66,7 +66,7 @@ BoardOthello::~BoardOthello() {
 }
 
 Board *BoardOthello::deepcopy() const {
-    BoardOthello *copy=new BoardOthello(width,height);
+	auto *copy=new BoardOthello(width,height);
 
     //copy internal data
     copy->played_count=played_count;
@@ -93,21 +93,21 @@ Move *BoardOthello::parse_move_string(Token player,const char *string) const {
 		if (is_move_valid(*move)) return move;
 
 		delete move;
-		return NULL;
+		return nullptr;
 	} else { //normal move
 		int column=-1,row=-1;
 
 		stream<<string;
 		stream>>column>>row;
 
-		if (stream.fail()) return NULL;
+		if (stream.fail()) return nullptr;
 
 		Move *move=new MoveOthello(player,column,row);
 
 		if (is_move_valid(*move)) return move;
 
 		delete move;
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -197,7 +197,7 @@ bool BoardOthello::can_play_normal_moves(Token player) const {
 }
 
 bool BoardOthello::is_move_valid(const Move &abstract_move) const {
-	const MoveOthello &move=dynamic_cast<const MoveOthello&>(abstract_move);
+	const auto &move=dynamic_cast<const MoveOthello&>(abstract_move);
 	if (move.can_play) return can_play_normal_move_at(move.player,move.column,move.row); //just check if move is valid
 	else return not can_play_normal_moves(move.player); //a cant play is invalid if you can play any normal move
 }
@@ -235,7 +235,7 @@ Size BoardOthello::switch_tokens(Token player,Size column, Size row, Size dcolum
 }
 
 void BoardOthello::play_move(const Move &abstract_move) {
-	const MoveOthello &move=dynamic_cast<const MoveOthello&>(abstract_move);
+	const auto &move=dynamic_cast<const MoveOthello&>(abstract_move);
 
 	assert(this->is_move_valid(move));
 
@@ -280,7 +280,7 @@ bool BoardOthello::play_random_move(Token player) {
 
 		if (possible_moves.empty()) return false; //two "cant play moves in a row"
 			
-		int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
+		int selected= static_cast<int>(rand() / (RAND_MAX + 1.0) * possible_moves.size());
 		Moves::const_iterator selected_iter=possible_moves.begin();
 		while (selected>0) {
 			selected--;
@@ -292,7 +292,7 @@ bool BoardOthello::play_random_move(Token player) {
 		//Move *selected=possible_moves[rand()%possible_moves.size()];
 		//play_move(*selected);
 
-		for (Moves::iterator iter=possible_moves.begin(); iter!=possible_moves.end(); iter++) delete *iter;
+		for (auto &possible_move : possible_moves) delete possible_move;
 
 		return true;
 	}

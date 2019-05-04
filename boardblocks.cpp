@@ -45,7 +45,7 @@ Move *MoveBlocks::deepcopy() const {
 }
 
 bool MoveBlocks::compare (const Move& abstract_move) const {
-    const MoveBlocks &move=dynamic_cast<const MoveBlocks&>(abstract_move);
+    const auto &move=dynamic_cast<const MoveBlocks&>(abstract_move);
 	return Move::compare(abstract_move) and color==move.color;
 }
 
@@ -97,7 +97,7 @@ BoardBlocks::BoardBlocks(Size width,Size height,bool init) : lastmove(PLAYER_2,N
     if (not init) return;
 
     assert(width%2==0 and height%2==0);
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(nullptr)));
 	for (Size row=0; row<height; row++) for (Size column=0; column<width/2; column++) {
         Color color = static_cast<Color>(rand()%6); //FIXME hardcoded color number
         {
@@ -357,7 +357,7 @@ bool BoardBlocks::play_random_move(Token player) {
     Moves possible_moves=get_possible_moves(player);
     if (possible_moves.empty()) return false;
 
-    int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
+    int selected= static_cast<int>(rand() / (RAND_MAX + 1.0) * possible_moves.size());
     Moves::const_iterator selected_iter=possible_moves.begin();
     while (selected>0) {
         selected--;

@@ -45,7 +45,7 @@ Move *PlayerBot::get_move(const Board *board, const Move * last_move) {
     }
 
 	const Node *best_child=root->get_best_child();
-	if (not best_child) return NULL;
+	if (not best_child) return nullptr;
 
     const Move *move=best_child->get_move();
 
@@ -94,7 +94,7 @@ PlayerBot::~PlayerBot() {
 PlayerHuman::PlayerHuman(Token player) : Player("human",player) {}
 
 Move *PlayerHuman::get_move(const Board *board,const Move * last_move) {
-	Move *move=NULL;
+	Move *move= nullptr;
 
 	while (not move) {
 

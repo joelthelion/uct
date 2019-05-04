@@ -18,7 +18,7 @@ Move *MoveC4::deepcopy() const {
 }
 
 bool MoveC4::compare (const Move& abstract_move) const {
-    const MoveC4 &move=dynamic_cast<const MoveC4&>(abstract_move);
+    const auto &move=dynamic_cast<const MoveC4&>(abstract_move);
 	return Move::compare(abstract_move) and column==move.column;
 }
 
@@ -51,7 +51,7 @@ BoardC4::~BoardC4() {
 }
 
 Board *BoardC4::deepcopy() const {
-    BoardC4 *copy=new BoardC4(width,height,win_length);
+	auto *copy=new BoardC4(width,height,win_length);
 
     //copy last move and played_count
     copy->lastmove=lastmove;
@@ -162,7 +162,7 @@ bool BoardC4::play_random_move(Token player) {
 	if (played_count<size) {
 		Moves possible_moves=get_possible_moves(player);
 
-		int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
+		int selected= static_cast<int>(rand() / (RAND_MAX + 1.0) * possible_moves.size());
 		Moves::const_iterator selected_iter=possible_moves.begin();
 		while (selected>0) {
 			selected--;
@@ -185,7 +185,7 @@ bool BoardC4::play_random_move(Token player) {
 
 Token BoardC4::check_for_win() const {
     Size column=lastmove.column;
-    Size row=token_for_columns[column]-tokens[column]+1;
+    Size row= static_cast<Size>(token_for_columns[column] - tokens[column] + 1);
 
 	assert(propagate(row,column,-1,0,lastmove.player)==1); //move up are never played
 
