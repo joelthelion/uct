@@ -13,8 +13,8 @@ typedef std::list<const Node*> ConstNodes;
 
 class Node {
 public:
-    Node(Value uct_constant); //root constructor
-    Node(const Move *move,Value uct_constant,Node *father=NULL);
+	explicit Node(Value uct_constant); //root constructor
+    Node(const Move *move,Value uct_constant,Node *father= nullptr);
     ~Node();
 
     void print() const;

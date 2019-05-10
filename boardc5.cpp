@@ -46,7 +46,7 @@ BoardC5::~BoardC5() {
 }
 
 Board *BoardC5::deepcopy() const {
-    BoardC5 *copy=new BoardC5(width,height,win_length);
+    auto *copy=new BoardC5(width,height,win_length);
 
     //copy last move and played_count
     copy->lastmove=lastmove;
@@ -69,7 +69,7 @@ Move *BoardC5::parse_move_string(Token player,const char *string) const {
 	stream<<string;
 	stream>>column>>row;
 
-	if (stream.fail()) return NULL;
+	if (stream.fail()) return nullptr;
 
 	Move *move=new MoveC5(player,column,row);
 
@@ -147,7 +147,7 @@ bool BoardC5::play_random_move(Token player) {
 	if (played_count<size) {
 		Moves possible_moves=get_possible_moves(player);
 
-		int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
+		int selected= static_cast<int>(rand() / (RAND_MAX + 1.0) * possible_moves.size());
 		Moves::const_iterator selected_iter=possible_moves.begin();
 		while (selected>0) {
 			selected--;

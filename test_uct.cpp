@@ -8,7 +8,7 @@
 int main(int argc, char *argv[]) {
 	std::cout.precision(2);
 	std::cout.setf(std::ios::fixed,std::ios::floatfield);
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     Board *board=new BoardC4();
 

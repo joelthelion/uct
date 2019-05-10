@@ -8,9 +8,11 @@ friend class BoardC4;
 public:
 	MoveC4(Token player,Size column);
 
-    virtual void print() const;
-	virtual Move *deepcopy() const;
-	virtual bool compare (const Move& move) const;
+    void print() const override;
+
+    Move *deepcopy() const override;
+
+    bool compare (const Move& move) const override;
 
 private:
     Size column;
@@ -19,18 +21,24 @@ private:
 class BoardC4 : public Board {
 friend class QBoardC4;
 public:
-	BoardC4(Size width=7,Size height=6,Size win_length=4);
-	virtual ~BoardC4();
+	explicit BoardC4(Size width=7,Size height=6,Size win_length=4);
 
-    virtual Board *deepcopy() const;
-	virtual Move *parse_move_string(Token player,const char *string) const;
-	virtual void print() const;
-	inline virtual bool is_move_valid(const Move &move) const;
+    ~BoardC4() override;
+
+    Board *deepcopy() const override;
+
+    Move *parse_move_string(Token player,const char *string) const override;
+
+    void print() const override;
+	inline bool is_move_valid(const Move &move) const override;
 	inline bool is_move_valid(const MoveC4 &move) const;
-	virtual Moves get_possible_moves(Token player) const; //FIXME not sure about constness
-	virtual void play_move(const Move &move);
-	virtual bool play_random_move(Token player);
-	virtual Token check_for_win() const;
+
+    Moves get_possible_moves(Token player) const override; //FIXME not sure about constness
+    void play_move(const Move &move) override;
+
+    bool play_random_move(Token player) override;
+
+    Token check_for_win() const override;
 
 protected:
 	inline Size propagate(Size row,Size column,Size drow,Size dcolumn,Token player) const;

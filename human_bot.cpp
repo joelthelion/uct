@@ -7,13 +7,13 @@
 int main(int argc, char *argv[]) {
 	std::cout.precision(2);
 	std::cout.setf(std::ios::fixed,std::ios::floatfield);
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     Game game=OTHELLO;
     if (argc>1) game=parse_game(argv[1]);
     Board *board=choose_game(game);
 
-    float bottime = 1.;
+    float bottime = static_cast<float>(1.);
     if (argc>2) bottime = parse_float(argv[2],bottime);
 
 	Player *player_a;

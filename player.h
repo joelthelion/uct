@@ -13,7 +13,7 @@ public:
 	virtual void print() const;
 	Token get_player() const;
 	virtual Move *get_move(const Board *board,const Move * last_move) =0;
-	virtual ~Player() {}
+	virtual ~Player() = default;
 
 protected:
 	std::string name;
@@ -22,11 +22,13 @@ protected:
 
 class PlayerBot : public Player {
 public:
-	PlayerBot(Token player,double max_sec=1.5,int max_iteration=0,Value uct_constant=1.);
+	explicit PlayerBot(Token player,double max_sec=1.5,int max_iteration=0,Value uct_constant= static_cast<Value>(1.));
 
-	virtual Move *get_move(const Board *board,const Move * last_move) ;
-	virtual ~PlayerBot();
-    virtual void print() const;
+    Move *get_move(const Board *board,const Move * last_move) override;
+
+    ~PlayerBot() override;
+
+    void print() const override;
 
 private:
 	double max_sec;
@@ -36,9 +38,9 @@ private:
 
 class PlayerHuman : public Player {
 public:
-	PlayerHuman(Token player);
+	explicit PlayerHuman(Token player);
 
-	virtual Move *get_move(const Board *board,const Move * last_move) ;
+    Move *get_move(const Board *board,const Move * last_move) override;
 };
 
 #endif

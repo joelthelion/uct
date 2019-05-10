@@ -31,7 +31,7 @@ MoveAwale::deepcopy() const
 bool
 MoveAwale::compare(const Move& abstract_move) const
 {
-		const MoveAwale& move=dynamic_cast<const MoveAwale&>(abstract_move);
+		const auto & move=dynamic_cast<const MoveAwale&>(abstract_move);
 		return Move::compare(abstract_move) and position==move.position;
 }
 
@@ -48,8 +48,7 @@ BoardAwale::BoardAwale()
 }
 
 BoardAwale::~BoardAwale()
-{
-}
+= default;
 
 Board*
 BoardAwale::deepcopy() const
@@ -85,7 +84,7 @@ BoardAwale::parse_move_string(Token player,const char *string) const
 		return NULL;
 }
 
-char
+int
 BoardAwale::format_slot(int count)
 {
 		if (count==0) return ' ';
@@ -237,7 +236,7 @@ BoardAwale::play_random_move(Token player)
 
 		if (possible_moves.empty()) return false;
 
-		int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
+		int selected= static_cast<int>(rand() / (RAND_MAX + 1.0) * possible_moves.size());
 		Moves::const_iterator selected_iter=possible_moves.begin();
 		while (selected>0) {
 				selected--;

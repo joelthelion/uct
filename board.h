@@ -9,7 +9,8 @@ class Board;
 class Move {
 public:
     Move();
-	Move(Token player);
+
+    explicit Move(Token player);
 
 	virtual Move *deepcopy() const;
     virtual void print() const;

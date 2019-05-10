@@ -18,7 +18,7 @@ Move *MoveMatches::deepcopy() const {
 }
 
 bool MoveMatches::compare (const Move& abstract_move) const {
-    const MoveMatches &move=dynamic_cast<const MoveMatches&>(abstract_move);
+    const auto &move=dynamic_cast<const MoveMatches&>(abstract_move);
 	return Move::compare(abstract_move) and matches_taken==move.matches_taken;
 }
 
@@ -27,7 +27,7 @@ bool MoveMatches::compare (const Move& abstract_move) const {
 
 BoardMatches::BoardMatches(int matches_count) : matches_count(matches_count), last_player(NOT_PLAYED) {}
 
-BoardMatches::~BoardMatches() {}
+BoardMatches::~BoardMatches() = default;
 
 Board *BoardMatches::deepcopy() const {
     BoardMatches *copy=new BoardMatches(matches_count);
@@ -100,7 +100,7 @@ bool BoardMatches::play_random_move(Token player) {
 	//FIXME could be more efficient
 	Moves possible_moves=get_possible_moves(player);
 
-	int selected=rand()/(RAND_MAX + 1.0) * possible_moves.size();
+	int selected= static_cast<int>(rand() / (RAND_MAX + 1.0) * possible_moves.size());
 	Moves::const_iterator selected_iter=possible_moves.begin();
 	while (selected>0) {
 		selected--;

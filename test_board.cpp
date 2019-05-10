@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-		srand(time(NULL));
+		srand(static_cast<unsigned int>(time(nullptr)));
 
 		Board *board=choose_game(AWALE);
 		board->print();

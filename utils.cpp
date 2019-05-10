@@ -66,8 +66,8 @@ Player *play_game(Player *player_a,Player *player_b,Board *board,int max_move) {
 
 	//FIXME check if there is a player one and a player two
 	Player *player_current=player_a;
-	Player *winner=NULL;
-	Move *last_move=NULL;
+	Player *winner= nullptr;
+	Move *last_move= nullptr;
 
     int k=0;
 	while (k<max_move or not max_move) {
@@ -76,7 +76,7 @@ Player *play_game(Player *player_a,Player *player_b,Board *board,int max_move) {
 		//get the move
 		Move *move=player_current->get_move(board,last_move);
 		if (not move) break;
-        if (last_move) delete last_move;
+		delete last_move;
 		last_move=move;
 
 		//actually play the move
@@ -96,7 +96,7 @@ Player *play_game(Player *player_a,Player *player_b,Board *board,int max_move) {
 
         k++;
 	}
-    if (last_move) delete last_move;
+	delete last_move;
 
     board->print();
 	if (winner) {

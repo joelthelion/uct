@@ -12,14 +12,14 @@ void Move::print() const {
 
 Move *Move::deepcopy() const {
 	assert(false);
-	return NULL;
+	return nullptr;
 }
 
 bool Move::compare(const Move &move) const {
     return this->player==move.player;
 }
 
-Board::~Board() {}
+Board::~Board() = default;
 
 Token Board::play_random_game(Token next_player) {
 

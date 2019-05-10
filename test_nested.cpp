@@ -14,14 +14,14 @@ struct Board {
 	virtual void print_board() const =0;
 	virtual Moves get_moves() const=0;
 
-	Move *move;
+	Move *move{};
 };
 
 typedef std::vector<Board*> Boards;
 
 //class implementation
 struct MoveA: public Move {
-    virtual void print_move() const { std::cout<<"move_a"<<std::endl; }
+    void print_move() const override { std::cout<<"move_a"<<std::endl; }
 };
 
 struct BoardA: public Board {
@@ -29,8 +29,10 @@ struct BoardA: public Board {
 
 	BoardA() : Board() { this->move=new Move(); }
 	~BoardA() { delete this->move; }
-	virtual void print_board() const { std::cout<<"board_a"<<std::endl; }
-	virtual Moves get_moves() const {
+
+    void print_board() const override { std::cout<<"board_a"<<std::endl; }
+
+    Moves get_moves() const override {
 		Moves moves;
 		moves.push_back(this->move);
 		moves.push_back(this->move);
@@ -40,13 +42,15 @@ struct BoardA: public Board {
 
 struct BoardB: public Board {
 	struct Move: public ::Move {
-		virtual void print_move() const { std::cout<<"move_b"<<std::endl; }
+        void print_move() const override { std::cout<<"move_b"<<std::endl; }
 	};
 
 	BoardB() : Board() { this->move=new Move(); }
 	~BoardB() { delete this->move; }
-	virtual void print_board() const { std::cout<<"board_b"<<std::endl; }
-	virtual Moves get_moves() const {
+
+    void print_board() const override { std::cout<<"board_b"<<std::endl; }
+
+    Moves get_moves() const override {
 		Moves moves;
 		moves.push_back(this->move);
 		moves.push_back(this->move);
@@ -74,7 +78,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	for (Boards::iterator iter=boards.begin(); iter<boards.end(); iter++) {
+	for (auto iter=boards.begin(); iter<boards.end(); iter++) {
 		delete *iter;
 	}
 

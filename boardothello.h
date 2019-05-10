@@ -6,12 +6,14 @@
 class MoveOthello : public Move {
 friend class BoardOthello;
 public:
-	MoveOthello(Token player); //cant play move
+	explicit MoveOthello(Token player); //cant play move
 	MoveOthello(Token player,Size column,Size row);
-	virtual bool compare(const Move& move) const;
 
-    virtual void print() const;
-	virtual Move *deepcopy() const;
+    bool compare(const Move& move) const override;
+
+    void print() const override;
+
+    Move *deepcopy() const override;
 
 private:
     Size column;
@@ -21,17 +23,24 @@ private:
 
 class BoardOthello : public Board {
 public:
-	BoardOthello(Size width=8,Size height=8);
-	virtual ~BoardOthello();
+	explicit BoardOthello(Size width=8,Size height=8);
 
-    virtual Board *deepcopy() const;
-	virtual Move *parse_move_string(Token player,const char *string) const;
-	virtual void print() const;
-	inline virtual bool is_move_valid(const Move &move) const;
-	virtual Moves get_possible_moves(Token player) const;
-	virtual void play_move(const Move &move);
-	virtual bool play_random_move(Token player);
-	virtual Token check_for_win() const;
+    ~BoardOthello() override;
+
+    Board *deepcopy() const override;
+
+    Move *parse_move_string(Token player,const char *string) const override;
+
+    void print() const override;
+	inline bool is_move_valid(const Move &move) const override;
+
+    Moves get_possible_moves(Token player) const override;
+
+    void play_move(const Move &move) override;
+
+    bool play_random_move(Token player) override;
+
+    Token check_for_win() const override;
 
 protected:
 	bool propagate(Token player, Size column, Size row, Size dcolumn, Size drow) const;
